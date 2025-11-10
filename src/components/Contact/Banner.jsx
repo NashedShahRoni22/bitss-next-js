@@ -18,7 +18,7 @@ export default function Banner() {
           </p>
 
           <div className="flex items-center gap-4 md:gap-5">
-            <div className="rounded-lg bg-accent p-3 md:p-5">
+            <div className="rounded-lg bg-primary p-3 md:p-5">
               <Home className="text-custom-white text-2xl" />
             </div>
             <div className="flex flex-col gap-1 md:gap-2">
@@ -28,7 +28,7 @@ export default function Banner() {
           </div>
 
           <div className="my-5 flex items-center gap-4 md:gap-5">
-            <div className="rounded-lg bg-accent p-3 md:p-5">
+            <div className="rounded-lg bg-primary p-3 md:p-5">
               <Phone className="text-custom-white text-2xl" />
             </div>
             <div className="flex flex-col gap-1 md:gap-2">
@@ -38,7 +38,7 @@ export default function Banner() {
           </div>
 
           <div className="flex items-center gap-4 md:gap-5">
-            <div className="rounded-lg bg-accent p-3 md:p-5">
+            <div className="rounded-lg bg-primary p-3 md:p-5">
               <Mail className="text-custom-white text-2xl" />
             </div>
             <div className="flex flex-col gap-1 md:gap-2">

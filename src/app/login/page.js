@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { LoaderCircle } from "lucide-react";
@@ -11,7 +11,7 @@ import useAuth from "@/hooks/useAuth";
 import { postApi } from "@/api/api";
 import { authFormValidationRules } from "@/data/authFormValidationRules";
 
-export default function Login() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect");
@@ -149,7 +149,7 @@ export default function Login() {
                 href="/signup"
                 className="text-sm text-blue-500 hover:underline"
               >
-                Don’t have an account? Create one
+                Don't have an account? Create one
               </Link>
               <button
                 type="submit"
@@ -167,5 +167,20 @@ export default function Login() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-red-600"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

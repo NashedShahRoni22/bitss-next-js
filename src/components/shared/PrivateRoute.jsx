@@ -1,9 +1,9 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
 
-export default function PrivateRoute({ children }) {
+function PrivateRouteContent({ children }) {
   const { authInfo, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -33,4 +33,16 @@ export default function PrivateRoute({ children }) {
   }
 
   return children;
+}
+
+export default function PrivateRoute({ children }) {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    }>
+      <PrivateRouteContent>{children}</PrivateRouteContent>
+    </Suspense>
+  );
 }
