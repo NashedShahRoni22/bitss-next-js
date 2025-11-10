@@ -1,26 +1,39 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* custom fonts */
+  --font-roboto: var(--font-roboto);
+
+  /* custom color */
+  --color-primary: #f71735;
+  --color-primary-hover: #af0707;
+  --color-dark: #011627;
+  --color-accent: #143347;
+  --color-custom-white: #fdfffc;
+
+  /* custom shadow */
+  --shadow-custom-1: 0 1rem 2rem rgba(7, 29, 43, 0.12);
+  --shadow-custom-2: 0 20px 40px -20px rgba(0, 0, 0, 0.4);
+  --shadow-custom-red: 0 10px 13px rgba(211, 47, 47, 0.16);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* google translator custom style */
+.goog-te-gadget {
+  color: transparent !important;
+}
+/* Change the text color */
+select.goog-te-combo {
+  color: #000 !important;
+  border: 1px solid #f71735;
+  padding: 5px;
+  border-radius: 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Remove the outline on focus */
+select.goog-te-combo:focus {
+  outline: none;
+  border: 1px solid #f71735;
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+#google_translate_element a {
+  display: none !important;
 }
