@@ -7,6 +7,7 @@ import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
 import Link from "next/link";
 import Image from "next/image";
+import SectionContainer from "@/components/shared/SectionContainer";
 
 export default function Products() {
   const { authInfo } = useAuth();
@@ -43,7 +44,7 @@ export default function Products() {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://paymentapi.bfinit.com/api/v1/products/product/category-wise/products"
+        "https://paymentapi.bfinit.com/api/v1/products/product/category-wise/products",
       );
       const data = await response.json();
 
@@ -71,7 +72,7 @@ export default function Products() {
         .toLowerCase()
         .includes(searchLower);
       const productMatch = category.products.some((product) =>
-        product.name.toLowerCase().includes(searchLower)
+        product.name.toLowerCase().includes(searchLower),
       );
       return categoryMatch || productMatch;
     });
@@ -114,7 +115,7 @@ export default function Products() {
       {/* Header */}
       <div className="border-b border-gray-200">
         {isProductsPage ? (
-          <div className="container mx-auto px-4 py-8">
+          <div className="mx-auto w-full max-w-7xl px-5 py-8 md:px-0">
             <h1 className="mb-2 text-4xl font-bold text-gray-900">
               Our Products
             </h1>
@@ -123,7 +124,7 @@ export default function Products() {
             </p>
           </div>
         ) : (
-          <div className="container mx-auto">
+          <div className="mx-auto w-full max-w-7xl px-5 md:px-0">
             <h1 className="mb-2 text-center text-4xl font-bold text-gray-900">
               Bitss For
             </h1>
@@ -132,7 +133,7 @@ export default function Products() {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <SectionContainer>
         {isProductsPage ? (
           /* Desktop Products Page Layout - Sidebar on Right */
           <div className="flex flex-col-reverse gap-8 lg:flex-row">
@@ -211,7 +212,7 @@ export default function Products() {
                         <span className="text-sm">
                           {categories.reduce(
                             (acc, cat) => acc + cat.products.length,
-                            0
+                            0,
                           )}
                         </span>
                       </div>
@@ -250,7 +251,7 @@ export default function Products() {
                   </p>
                   <Link
                     href="/contact"
-                    className="w-full rounded-lg bg-gray-900 py-2 px-4 font-semibold text-white transition-colors hover:bg-gray-800"
+                    className="w-full rounded-lg bg-gray-900 px-4 py-2 font-semibold text-white transition-colors hover:bg-gray-800"
                   >
                     Contact Us
                   </Link>
@@ -262,11 +263,11 @@ export default function Products() {
           /* Mobile/Home Layout - Top Tab Bar */
           <div className="space-y-8">
             {/* Top Tab Bar for Categories */}
-            <div className="overflow-x-auto pb-2 -mx-4 px-4">
-              <div className="flex gap-2 min-w-max justify-center">
+            <div className="-mx-4 overflow-x-auto px-4 pb-2">
+              <div className="flex min-w-max justify-center gap-2">
                 <button
                   onClick={() => setSelectedCategory("all")}
-                  className={`rounded-full px-6 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
+                  className={`rounded-full px-6 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                     selectedCategory === "all"
                       ? "bg-red-600 text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -277,7 +278,7 @@ export default function Products() {
                     (
                     {categories.reduce(
                       (acc, cat) => acc + cat.products.length,
-                      0
+                      0,
                     )}
                     )
                   </span>
@@ -287,7 +288,7 @@ export default function Products() {
                   <button
                     key={category._id}
                     onClick={() => setSelectedCategory(category._id)}
-                    className={`rounded-full px-6 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
+                    className={`rounded-full px-6 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                       selectedCategory === category._id
                         ? "bg-red-600 text-white"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -327,10 +328,10 @@ export default function Products() {
                         />
                       </div>
                       <div>
-                        <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                        <h2 className="text-xl font-bold text-gray-900 md:text-2xl">
                           {category.categoryName}
                         </h2>
-                        <p className="text-sm md:text-base text-gray-600">
+                        <p className="text-sm text-gray-600 md:text-base">
                           {category.sort_description}
                         </p>
                       </div>
@@ -358,7 +359,7 @@ export default function Products() {
             )}
           </div>
         )}
-      </div>
+      </SectionContainer>
     </div>
   );
 }

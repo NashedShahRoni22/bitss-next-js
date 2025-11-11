@@ -5,6 +5,7 @@ import AuthProvider from "@/provider/AuthProvider";
 import CartProvider from "@/provider/CartProvider";
 import Footer from "@/components/shared/Footer";
 import "./globals.css";
+import FloatingCartButton from "@/components/shared/FloatingCartButton";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -20,12 +21,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} antialiased font-roboto`}>
+      <body className={`${roboto.variable} font-roboto antialiased`}>
         <AuthProvider>
           <CartProvider>
             <Navbar />
             {children}
             <Footer />
+            <FloatingCartButton />
             <Toaster />
           </CartProvider>
         </AuthProvider>

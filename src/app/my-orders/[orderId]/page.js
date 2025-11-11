@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import SectionContainer from "@/components/shared/SectionContainer";
 import calculatePriceWithDiscount from "@/utils/calculatePriceWithDiscount";
+import PrivateRoute from "@/components/shared/PrivateRoute";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
@@ -20,7 +21,7 @@ export default function OrderDetails() {
             headers: {
               Authorization: `Bearer ${authInfo?.access_token}`,
             },
-          }
+          },
         );
         const data = await res.json();
 
@@ -67,31 +68,35 @@ export default function OrderDetails() {
 
   if (loading) {
     return (
-      <SectionContainer>
-        <div className="flex min-h-64 items-center justify-center">
-          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-red-500"></div>
-        </div>
-      </SectionContainer>
+      <PrivateRoute>
+        <SectionContainer>
+          <div className="flex min-h-64 items-center justify-center">
+            <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-red-500"></div>
+          </div>
+        </SectionContainer>
+      </PrivateRoute>
     );
   }
 
   if (!orderData?.success) {
     return (
-      <SectionContainer>
-        <div className="py-12 text-center">
-          <p className="text-gray-500">Order not found</p>
-        </div>
-      </SectionContainer>
+      <PrivateRoute>
+        <SectionContainer>
+          <div className="py-12 text-center">
+            <p className="text-gray-500">Order not found</p>
+          </div>
+        </SectionContainer>
+      </PrivateRoute>
     );
   }
 
   const order = orderData.data;
 
   return (
-    <SectionContainer>
-      <div className="mx-auto max-w-6xl py-8">
+    <PrivateRoute>
+      <SectionContainer>
         {/* Header */}
-        <div className="mb-6 rounded-lg border bg-white p-6 shadow-sm">
+        <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-start justify-between">
             <div>
               <h1 className="mb-2 text-2xl font-bold text-gray-900">
@@ -104,7 +109,7 @@ export default function OrderDetails() {
             <div className="text-right">
               <span
                 className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${getStatusColor(
-                  order.status
+                  order.status,
                 )}`}
               >
                 {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
@@ -141,7 +146,7 @@ export default function OrderDetails() {
         </div>
 
         {/* Customer Information */}
-        <div className="mb-6 rounded-lg border bg-white p-6 shadow-sm">
+        <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold text-gray-900">
             Customer Information
           </h2>
@@ -168,17 +173,20 @@ export default function OrderDetails() {
         </div>
 
         {/* Products */}
-        <div className="rounded-lg border bg-white p-6 shadow-sm">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold text-gray-900">
             Products ({order.products.length})
           </h2>
           <div className="space-y-6">
             {order.products.map((item) => (
-              <div key={item._id} className="rounded-lg border p-6">
+              <div
+                key={item._id}
+                className="rounded-lg border border-gray-200 p-6"
+              >
                 <div className="mb-4 flex items-start justify-between">
                   <div className="flex-1">
                     <div className="mb-2 flex items-center gap-3">
-                      <h3 className="text-lg font-semibold capitalize text-gray-900">
+                      <h3 className="text-lg font-semibold text-gray-900 capitalize">
                         {item.product.name}
                       </h3>
                       <span className="text-sm text-gray-500">
@@ -223,7 +231,7 @@ export default function OrderDetails() {
                             ? ` ${item.subscription.amount}% off`
                             : ` ${formatCurrency(
                                 item.subscription.amount,
-                                order.currency
+                                order.currency,
                               )} off`}
                         </p>
                       </div>
@@ -234,14 +242,14 @@ export default function OrderDetails() {
                     <p className="text-2xl font-bold text-red-500">
                       {formatCurrency(
                         calculatePriceWithDiscount(item).toFixed(2),
-                        order.currency
+                        order.currency,
                       )}
                     </p>
                     <p className="text-sm text-gray-500 line-through">
                       Original:{" "}
                       {formatCurrency(
                         (item.product.price * item.period).toFixed(2),
-                        order.currency
+                        order.currency,
                       )}
                     </p>
                   </div>
@@ -259,7 +267,7 @@ export default function OrderDetails() {
                         className="flex items-center text-sm text-gray-700"
                       >
                         <svg
-                          className="mr-2 h-4 w-4 flex-shrink-0 text-green-500"
+                          className="mr-2 h-4 w-4 shrink-0 text-green-500"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -292,7 +300,7 @@ export default function OrderDetails() {
             ))}
           </div>
         </div>
-      </div>
-    </SectionContainer>
+      </SectionContainer>
+    </PrivateRoute>
   );
 }

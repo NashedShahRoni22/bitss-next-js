@@ -12,6 +12,8 @@ import {
   X,
 } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
+import PrivateRoute from "@/components/shared/PrivateRoute";
+import SectionContainer from "@/components/shared/SectionContainer";
 
 export default function Profile() {
   const { authInfo } = useAuth();
@@ -78,8 +80,8 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <PrivateRoute>
+      <SectionContainer>
         {/* Header Section */}
         <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col items-center justify-between sm:flex-row">
@@ -167,7 +169,7 @@ export default function Profile() {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:outline-none"
                     />
                   ) : (
                     <p className="py-2 text-gray-900">{authInfo?.user?.name}</p>
@@ -185,7 +187,7 @@ export default function Profile() {
                       name="username"
                       value={formData.username}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:outline-none"
                     />
                   ) : (
                     <p className="py-2 text-gray-900">
@@ -206,7 +208,7 @@ export default function Profile() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:outline-none"
                     />
                   ) : (
                     <p className="py-2 text-gray-900">
@@ -226,7 +228,7 @@ export default function Profile() {
                       name="personal_email"
                       value={formData.personal_email}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:outline-none"
                     />
                   ) : (
                     <p className="py-2 text-gray-900">
@@ -247,7 +249,7 @@ export default function Profile() {
                       name="address"
                       value={formData.address}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:outline-none"
                     />
                   ) : (
                     <p className="py-2 text-gray-900">
@@ -268,7 +270,7 @@ export default function Profile() {
                       name="country"
                       value={formData.country}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:outline-none"
                     />
                   ) : (
                     <p className="py-2 text-gray-900">
@@ -298,7 +300,7 @@ export default function Profile() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </SectionContainer>
+    </PrivateRoute>
   );
 }

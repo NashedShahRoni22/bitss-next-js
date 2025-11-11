@@ -35,7 +35,7 @@ const MyOrders = () => {
             headers: {
               Authorization: `Bearer ${authInfo?.access_token}`,
             },
-          }
+          },
         );
         const data = await res.json();
         if (data.success) {
@@ -113,267 +113,253 @@ const MyOrders = () => {
 
   if (loading) {
     return (
-      <SectionContainer>
-        <div className="flex min-h-96 items-center justify-center">
-          <div className="text-center">
-            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
-            <p className="text-dark">Loading your orders...</p>
+      <PrivateRoute>
+        <SectionContainer>
+          <div className="flex min-h-96 items-center justify-center">
+            <div className="text-center">
+              <div className="border-primary mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2"></div>
+              <p className="text-dark">Loading your orders...</p>
+            </div>
           </div>
-        </div>
-      </SectionContainer>
+        </SectionContainer>
+      </PrivateRoute>
     );
   }
 
   return (
     <PrivateRoute>
       <SectionContainer>
-        <div className="min-h-screen bg-custom-white">
-          <div className="container mx-auto max-w-6xl px-4 py-8">
-            {/* Header */}
-            <div className="mb-8">
-              <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-xl bg-primary/10 p-3">
-                  <Shield className="h-8 w-8 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-4xl font-bold text-dark">
-                    My Security Orders
-                  </h1>
-                  <p className="mt-1 text-lg text-accent">
-                    Manage your cybersecurity subscriptions and licenses
-                  </p>
-                </div>
+        {/* Header */}
+        <div className="mb-8">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="bg-primary/10 rounded-xl p-3">
+              <Shield className="text-primary h-8 w-8" />
+            </div>
+            <div>
+              <h1 className="text-dark text-4xl font-bold">
+                My Security Orders
+              </h1>
+              <p className="text-accent mt-1 text-lg">
+                Manage your cybersecurity subscriptions and licenses
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-accent text-sm font-medium">
+                  Active Licenses
+                </p>
+                <p className="text-primary mt-1 text-3xl font-bold">
+                  {orders.filter((order) => order.invoices?.[0]?.paid).length}
+                </p>
+              </div>
+              <div className="rounded-xl bg-green-50 p-3">
+                <CircleAlert className="h-6 w-6 text-green-600" />
               </div>
             </div>
+          </div>
 
-            {/* Stats Cards */}
-            <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-accent">
-                      Active Licenses
-                    </p>
-                    <p className="mt-1 text-3xl font-bold text-primary">
-                      {
-                        orders.filter((order) => order.invoices?.[0]?.paid)
-                          .length
-                      }
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-green-50 p-3">
-                    <CircleAlert className="h-6 w-6 text-green-600" />
-                  </div>
-                </div>
+          <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-accent text-sm font-medium">
+                  Pending Orders
+                </p>
+                <p className="text-primary mt-1 text-3xl font-bold">
+                  {orders.filter((order) => !order.invoices?.[0]?.paid).length}
+                </p>
               </div>
-
-              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-accent">
-                      Pending Orders
-                    </p>
-                    <p className="mt-1 text-3xl font-bold text-primary">
-                      {
-                        orders.filter((order) => !order.invoices?.[0]?.paid)
-                          .length
-                      }
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-orange-50 p-3">
-                    <Clock className="h-6 w-6 text-orange-600" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-accent">
-                      Total Orders
-                    </p>
-                    <p className="mt-1 text-3xl font-bold text-primary">
-                      {orders.length}
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-primary/10 p-3">
-                    <Package className="h-6 w-6 text-primary" />
-                  </div>
-                </div>
+              <div className="rounded-xl bg-orange-50 p-3">
+                <Clock className="h-6 w-6 text-orange-600" />
               </div>
             </div>
+          </div>
 
-            {/* Search and Filter */}
-            <div className="mb-8 flex flex-col gap-4 md:flex-row">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 transform text-accent" />
-                <input
-                  type="text"
-                  placeholder="Search by order number, product name, category, or domain..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 py-4 pl-12 pr-4 text-dark focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
+          <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-accent text-sm font-medium">Total Orders</p>
+                <p className="text-primary mt-1 text-3xl font-bold">
+                  {orders.length}
+                </p>
               </div>
-              <div className="flex items-center gap-3">
-                <Filter className="h-5 w-5 text-accent" />
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="min-w-[160px] rounded-xl border border-gray-200 px-6 py-4 text-dark focus:outline-none focus:ring-2 focus:ring-primary/20"
+              <div className="bg-primary/10 rounded-xl p-3">
+                <Package className="text-primary h-6 w-6" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Search and Filter */}
+        <div className="mb-8 flex flex-col gap-4 md:flex-row">
+          <div className="relative flex-1">
+            <Search className="text-accent absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform" />
+            <input
+              type="text"
+              placeholder="Search by order number, product name, category, or domain..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="text-dark focus:ring-primary/20 w-full rounded-xl border border-gray-200 py-4 pr-4 pl-12 focus:ring-2 focus:outline-none"
+            />
+          </div>
+          <div className="flex items-center gap-3">
+            <Filter className="text-accent h-5 w-5" />
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="text-dark focus:ring-primary/20 min-w-[160px] rounded-xl border border-gray-200 px-6 py-4 focus:ring-2 focus:outline-none"
+            >
+              <option value="all">All Orders</option>
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Orders List */}
+        <div className="space-y-6">
+          {filteredOrders.length === 0 ? (
+            <div className="py-16 text-center">
+              <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-50 p-4">
+                <Package className="text-accent h-10 w-10" />
+              </div>
+              <h3 className="text-dark mb-2 text-xl font-semibold">
+                No orders found
+              </h3>
+              <p className="text-accent">
+                {searchTerm || filterStatus !== "all"
+                  ? "Try adjusting your search or filter criteria."
+                  : "You haven't made any purchases yet."}
+              </p>
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="text-primary mt-4 hover:underline"
                 >
-                  <option value="all">All Orders</option>
-                  <option value="active">Active</option>
-                  <option value="pending">Pending</option>
-                </select>
-              </div>
+                  Clear search
+                </button>
+              )}
             </div>
-
-            {/* Orders List */}
-            <div className="space-y-6">
-              {filteredOrders.length === 0 ? (
-                <div className="py-16 text-center">
-                  <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-50 p-4">
-                    <Package className="h-10 w-10 text-accent" />
-                  </div>
-                  <h3 className="mb-2 text-xl font-semibold text-dark">
-                    No orders found
-                  </h3>
-                  <p className="text-accent">
-                    {searchTerm || filterStatus !== "all"
-                      ? "Try adjusting your search or filter criteria."
-                      : "You haven't made any purchases yet."}
-                  </p>
-                  {searchTerm && (
-                    <button
-                      onClick={() => setSearchTerm("")}
-                      className="mt-4 text-primary hover:underline"
-                    >
-                      Clear search
-                    </button>
-                  )}
+          ) : (
+            <>
+              {/* Show search results count */}
+              {searchTerm && (
+                <div className="text-accent mb-4 text-sm">
+                  Found {filteredOrders.length} order
+                  {filteredOrders.length !== 1 ? "s" : ""}
+                  {searchTerm && ` matching "${searchTerm}"`}
+                  {filterStatus !== "all" && ` with status "${filterStatus}"`}
                 </div>
-              ) : (
-                <>
-                  {/* Show search results count */}
-                  {searchTerm && (
-                    <div className="mb-4 text-sm text-accent">
-                      Found {filteredOrders.length} order
-                      {filteredOrders.length !== 1 ? "s" : ""}
-                      {searchTerm && ` matching "${searchTerm}"`}
-                      {filterStatus !== "all" &&
-                        ` with status "${filterStatus}"`}
-                    </div>
-                  )}
+              )}
 
-                  {filteredOrders.map((order) => {
-                    const invoice = order.invoices?.[0];
-                    const statusInfo = getStatusInfo(
-                      order.status,
-                      invoice?.paid
-                    );
-                    const StatusIcon = statusInfo.icon;
+              {filteredOrders.map((order) => {
+                const invoice = order.invoices?.[0];
+                const statusInfo = getStatusInfo(order.status, invoice?.paid);
+                const StatusIcon = statusInfo.icon;
 
-                    return (
-                      <div
-                        key={order._id}
-                        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
-                      >
-                        {/* Order Header */}
-                        <div className="border-b border-gray-100 p-6">
-                          <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
-                            <div className="flex items-start gap-4">
-                              <div className="rounded-xl bg-primary/10 p-3">
-                                <Shield className="h-6 w-6 text-primary" />
+                return (
+                  <div
+                    key={order._id}
+                    className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
+                  >
+                    {/* Order Header */}
+                    <div className="border-b border-gray-100 p-6">
+                      <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+                        <div className="flex items-start gap-4">
+                          <div className="bg-primary/10 rounded-xl p-3">
+                            <Shield className="text-primary h-6 w-6" />
+                          </div>
+                          <div>
+                            <h3 className="text-dark mb-1 text-lg font-bold">
+                              {order.order_number}
+                            </h3>
+                            <div className="text-accent flex items-center gap-4 text-sm">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="h-4 w-4" />
+                                <span>{formatDate(order.created_at)}</span>
                               </div>
-                              <div>
-                                <h3 className="mb-1 text-lg font-bold text-dark">
-                                  {order.order_number}
-                                </h3>
-                                <div className="flex items-center gap-4 text-sm text-accent">
-                                  <div className="flex items-center gap-1">
-                                    <Calendar className="h-4 w-4" />
-                                    <span>{formatDate(order.created_at)}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1">
-                                    <CreditCard className="h-4 w-4" />
-                                    <span className="capitalize">
-                                      {invoice?.payment_method ||
-                                        invoice?.payment_type ||
-                                        "N/A"}
-                                    </span>
-                                  </div>
-                                  {order.domain && (
-                                    <div className="flex items-center gap-1">
-                                      <span>Domain: {order.domain}</span>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-4">
-                              <div
-                                className={`flex items-center gap-2 rounded-xl border px-4 py-2 ${statusInfo.color}`}
-                              >
-                                <StatusIcon
-                                  className={`h-4 w-4 ${statusInfo.iconColor}`}
-                                />
-                                <span className="text-sm font-medium">
-                                  {statusInfo.label}
+                              <div className="flex items-center gap-1">
+                                <CreditCard className="h-4 w-4" />
+                                <span className="capitalize">
+                                  {invoice?.payment_method ||
+                                    invoice?.payment_type ||
+                                    "N/A"}
                                 </span>
                               </div>
-                              <div className="text-right">
-                                <p className="text-2xl font-bold text-primary">
-                                  {formatCurrency(
-                                    order.totalPrice || 0,
-                                    order.currency
-                                  )}
-                                </p>
-                                <p className="text-sm text-accent">
-                                  {order.country}
-                                </p>
-                              </div>
+                              {order.domain && (
+                                <div className="flex items-center gap-1">
+                                  <span>Domain: {order.domain}</span>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
 
-                        {/* Products */}
-                        <div className="p-6">
-                          <div className="space-y-4">
-                            {order.products?.map((productOrder, index) => (
-                              <OrderProduct
-                                key={index}
-                                productOrder={productOrder}
-                                order={order}
-                              />
-                            )) || (
-                              <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
-                                <p className="text-accent">
-                                  No products found for this order
-                                </p>
-                              </div>
-                            )}
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={`flex items-center gap-2 rounded-xl border px-4 py-2 ${statusInfo.color}`}
+                          >
+                            <StatusIcon
+                              className={`h-4 w-4 ${statusInfo.iconColor}`}
+                            />
+                            <span className="text-sm font-medium">
+                              {statusInfo.label}
+                            </span>
                           </div>
-
-                          {/* Action Button */}
-                          <div className="mt-6">
-                            <Link
-                              href={`/my-orders/${order?._id}`}
-                              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-primary-hover hover:shadow-lg sm:w-auto"
-                            >
-                              <Eye className="h-5 w-5" />
-                              View Order Details
-                            </Link>
+                          <div className="text-right">
+                            <p className="text-primary text-2xl font-bold">
+                              {formatCurrency(
+                                order.totalPrice || 0,
+                                order.currency,
+                              )}
+                            </p>
+                            <p className="text-accent text-sm">
+                              {order.country}
+                            </p>
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
-                </>
-              )}
-            </div>
-          </div>
+                    </div>
+
+                    {/* Products */}
+                    <div className="p-6">
+                      <div className="space-y-4">
+                        {order.products?.map((productOrder, index) => (
+                          <OrderProduct
+                            key={index}
+                            productOrder={productOrder}
+                            order={order}
+                          />
+                        )) || (
+                          <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                            <p className="text-accent">
+                              No products found for this order
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action Button */}
+                      <div className="mt-6">
+                        <Link
+                          href={`/my-orders/${order?._id}`}
+                          className="bg-primary hover:bg-primary-hover inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-3 font-semibold text-white transition-all duration-200 hover:shadow-lg sm:w-auto"
+                        >
+                          <Eye className="h-5 w-5" />
+                          View Order Details
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          )}
         </div>
       </SectionContainer>
     </PrivateRoute>

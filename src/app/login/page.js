@@ -10,6 +10,7 @@ import FormField from "@/components/FormField";
 import useAuth from "@/hooks/useAuth";
 import { postApi } from "@/api/api";
 import { authFormValidationRules } from "@/data/authFormValidationRules";
+import SectionContainer from "@/components/shared/SectionContainer";
 
 function LoginForm() {
   const router = useRouter();
@@ -63,7 +64,7 @@ function LoginForm() {
         } else {
           // Handle API response with success: false
           toast.error(
-            res?.message || "Login failed. Please check your credentials."
+            res?.message || "Login failed. Please check your credentials.",
           );
         }
       } catch (error) {
@@ -85,7 +86,7 @@ function LoginForm() {
   };
 
   return (
-    <section className="w-full py-10 font-roboto">
+    <SectionContainer>
       <div className="mx-5 flex flex-col gap-8 md:container md:mx-auto md:flex-row md:gap-16">
         {/* left text/info */}
         <div className="flex w-full flex-col px-5 py-10 md:w-1/2">
@@ -100,7 +101,7 @@ function LoginForm() {
             <h2 className="mt-6 text-center text-2xl font-medium text-gray-900">
               Welcome back to Bitss Security
             </h2>
-            <p className="mx-auto mt-2 w-full max-w-lg text-balance text-center text-gray-700">
+            <p className="mx-auto mt-2 w-full max-w-lg text-center text-balance text-gray-700">
               Sign in to access your account and manage your digital protection
               tools anytime, anywhere.
             </p>
@@ -108,7 +109,7 @@ function LoginForm() {
         </div>
 
         {/* login form */}
-        <div className="borer-gray-200 w-full rounded-lg border bg-white px-5 py-10 md:w-1/2">
+        <div className="w-full rounded-lg border border-gray-200 bg-white px-5 py-10 md:w-1/2">
           <h1 className="text-center text-2xl font-semibold">Sign In</h1>
           <p className="text-center text-lg">Securely access your account</p>
 
@@ -149,12 +150,12 @@ function LoginForm() {
                 href="/signup"
                 className="text-sm text-blue-500 hover:underline"
               >
-                Don't have an account? Create one
+                Don&apos;t have an account? Create one
               </Link>
               <button
                 type="submit"
                 disabled={!isFormValid() || isLoading}
-                className={`inline-flex w-full flex-shrink-0 items-center justify-center gap-2 rounded px-4 py-2 font-medium text-white transition-all duration-200 ease-in-out disabled:opacity-50 md:w-fit ${
+                className={`inline-flex w-full shrink-0 items-center justify-center gap-2 rounded px-4 py-2 font-medium text-white transition-all duration-200 ease-in-out disabled:opacity-50 md:w-fit ${
                   isFormValid()
                     ? "bg-primary hover:bg-primary-hover active:scale-[0.98]"
                     : "cursor-not-allowed bg-gray-400"
@@ -166,20 +167,22 @@ function LoginForm() {
           </form>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 }
 
 export default function Login() {
   return (
-    <Suspense fallback={
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-red-600"></div>
-          <p className="text-gray-600">Loading...</p>
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center">
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-red-600"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <LoginForm />
     </Suspense>
   );

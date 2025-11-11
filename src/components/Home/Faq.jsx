@@ -10,7 +10,7 @@ export default function Faq({ faqData, title }) {
   };
 
   return (
-    <section className="px-5 py-10 md:container md:mx-auto md:py-20">
+    <section className="w-full px-5 py-10 md:mx-auto md:max-w-7xl md:px-0 md:py-20">
       <h2 className="mb-20 text-center text-3xl font-bold md:text-[2.5rem]">
         Frequently asked questions{" "}
         {title && <span className="text-primary">: {title}</span>}
@@ -26,8 +26,8 @@ export default function Faq({ faqData, title }) {
             >
               {faq.que}
               <div
-                className={`flex min-h-8 min-w-8 items-center justify-center rounded-full border border-[#C5D6E0] transition-all duration-200 ease-linear group-hover:border-dark ${
-                  faqOpen === faq.id && "rotate-45 bg-dark text-custom-white"
+                className={`group-hover:border-dark flex min-h-8 min-w-8 items-center justify-center rounded-full border border-[#C5D6E0] transition-all duration-200 ease-linear ${
+                  faqOpen === faq.id && "bg-dark text-custom-white rotate-45"
                 }`}
               >
                 <Plus className="text-xl transition-all duration-200 ease-linear" />

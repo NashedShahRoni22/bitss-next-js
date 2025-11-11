@@ -101,7 +101,7 @@ export default function Signup() {
         console.error("Registration error:", error);
         toast.error(
           error?.message ||
-            "An error occurred during registration. Please try again."
+            "An error occurred during registration. Please try again.",
         );
       } finally {
         // Always set loading to false, whether success or error
@@ -111,10 +111,10 @@ export default function Signup() {
   };
 
   return (
-    <section className="w-full py-10 font-roboto">
+    <section className="font-roboto w-full py-10">
       <div className="mx-5 flex flex-col gap-8 md:container md:mx-auto md:flex-row md:gap-16">
         {/* form container */}
-        <div className="borer-gray-200 w-full rounded-lg border bg-white px-5 py-10 md:w-1/2">
+        <div className="w-full rounded-lg border border-gray-200 bg-white px-5 py-10 md:w-1/2">
           <h1 className="text-center text-2xl font-semibold">
             Create your account
           </h1>
@@ -180,7 +180,7 @@ export default function Signup() {
 
               <select
                 id="country"
-                className="w-full rounded border px-4 py-2 outline-none focus:border-black"
+                className="w-full rounded border border-gray-200 px-4 py-2 outline-none"
                 {...register("country", {
                   required: "Please select a country.",
                 })}
@@ -270,7 +270,7 @@ export default function Signup() {
               <button
                 type="submit"
                 disabled={!isFormValid() || isLoading}
-                className={`inline-flex w-full flex-shrink-0 items-center justify-center gap-2 rounded px-4 py-2 font-medium text-white transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 md:w-fit ${
+                className={`inline-flex w-full shrink-0 items-center justify-center gap-2 rounded px-4 py-2 font-medium text-white transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 md:w-fit ${
                   isFormValid()
                     ? "bg-primary hover:bg-primary-hover active:scale-[0.98]"
                     : "cursor-not-allowed bg-gray-400"
@@ -296,7 +296,7 @@ export default function Signup() {
             <h2 className="mt-6 text-center text-2xl font-medium text-gray-900">
               Protect your devices with one account
             </h2>
-            <p className="mx-auto mt-2 w-full max-w-lg text-balance text-center text-gray-700">
+            <p className="mx-auto mt-2 w-full max-w-lg text-center text-balance text-gray-700">
               Manage your digital security easily and efficiently. Anytime.
               Anywhere.
             </p>

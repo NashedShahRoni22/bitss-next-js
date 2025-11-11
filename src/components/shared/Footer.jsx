@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-[#C5D6E0] py-10 md:mt-20">
       <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-8 border-b border-[#C5D6E0] px-5 pb-12 md:container md:mx-auto md:grid-cols-2 lg:grid-cols-12">
+        <div className="grid w-full grid-cols-1 gap-8 border-b border-[#C5D6E0] px-5 pb-12 md:mx-auto md:max-w-7xl md:grid-cols-2 md:px-0 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <Link href="/">
               <Image src={logo} alt="bitss logo" width={128} height={128} />
@@ -28,7 +28,7 @@ export default function Footer() {
                 id="email"
                 className="rounded-l border-none bg-[#f2f2f2] px-4 py-1.5 outline-none"
               />
-              <button className="rounded-r bg-primary px-4 py-1.5 text-custom-white transition-all duration-200 ease-in-out hover:bg-primary-hover">
+              <button className="bg-primary text-custom-white hover:bg-primary-hover rounded-r px-4 py-1.5 transition-all duration-200 ease-in-out">
                 Subscribe
               </button>
             </div>
@@ -91,7 +91,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between gap-8 px-5 py-6 md:container md:mx-auto md:flex-row md:items-center md:px-0">
+        <div className="flex w-full flex-col justify-between gap-8 px-5 py-6 md:mx-auto md:max-w-7xl md:flex-row md:items-center md:px-0">
           <p className="flex gap-2 md:items-center">
             <Copyright size={24} className="mt-0.5 min-w-fit md:mt-0" />
             2025 BFIN Company All rights Reserved | 8 rue de Dublin, 34200,
@@ -100,25 +100,25 @@ export default function Footer() {
           <div className="flex items-center justify-center gap-7 md:justify-normal">
             <Link
               href="/"
-              className="transition-all duration-200 ease-in-out hover:text-primary"
+              className="hover:text-primary transition-all duration-200 ease-in-out"
             >
               <Facebook size={24} />
             </Link>
             <Link
               href="/"
-              className="transition-all duration-200 ease-in-out hover:text-primary"
+              className="hover:text-primary transition-all duration-200 ease-in-out"
             >
               <Instagram size={24} />
             </Link>
             <Link
               href="/"
-              className="transition-all duration-200 ease-in-out hover:text-primary"
+              className="hover:text-primary transition-all duration-200 ease-in-out"
             >
               <Twitter size={24} />
             </Link>
             <Link
               href="/"
-              className="transition-all duration-200 ease-in-out hover:text-primary"
+              className="hover:text-primary transition-all duration-200 ease-in-out"
             >
               <Youtube size={24} />
             </Link>

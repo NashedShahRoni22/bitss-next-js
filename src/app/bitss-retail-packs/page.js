@@ -8,6 +8,7 @@ import {
   Package,
   Shield,
 } from "lucide-react";
+import SectionContainer from "@/components/shared/SectionContainer";
 
 export default function BitssRetailPacks() {
   const [product, setProduct] = useState(null);
@@ -33,7 +34,7 @@ export default function BitssRetailPacks() {
         setError(null);
 
         const response = await fetch(
-          `https://paymentapi.bfinit.com/api/v1/products/product/show/690718729ddffc5f45c8c449`
+          `https://paymentapi.bfinit.com/api/v1/products/product/show/690718729ddffc5f45c8c449`,
         );
         const result = await response.json();
 
@@ -168,14 +169,14 @@ export default function BitssRetailPacks() {
 
   // Main Content
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <SectionContainer>
+      <div className="mx-auto w-full max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-red-600 rounded-full mb-4">
-            <Box className="w-8 h-8 text-white" />
+        <div className="mb-12 text-center">
+          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-600">
+            <Box className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="mb-2 text-4xl font-bold text-gray-900">
             Order {product?.name}
           </h1>
           <p className="text-lg text-gray-600">
@@ -183,20 +184,20 @@ export default function BitssRetailPacks() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid gap-8 lg:grid-cols-2">
           {/* Product Details Card */}
-          <div className="bg-white rounded shadow overflow-hidden">
-            <div className="bg-gradient-to-r from-red-600 to-indigo-600 p-6">
+          <div className="overflow-hidden rounded bg-white shadow">
+            <div className="bg-linear-to-r from-red-600 to-indigo-600 p-6">
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Shield className="w-8 h-8 text-white" />
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-white/20">
+                  <Shield className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-white mb-2">
+                  <h2 className="mb-2 text-2xl font-bold text-white">
                     {product?.name}
                   </h2>
-                  <div className="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full">
-                    <span className="text-sm text-white font-medium">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1">
+                    <span className="text-sm font-medium text-white">
                       {product?.category?.name}
                     </span>
                   </div>
@@ -207,13 +208,13 @@ export default function BitssRetailPacks() {
             <div className="p-6">
               {/* Features */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="mb-3 text-lg font-semibold text-gray-900">
                   Product Features
                 </h3>
                 <ul className="space-y-2">
                   {product?.product_details?.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
                       <span className="text-sm text-gray-700">{feature}</span>
                     </li>
                   ))}
@@ -222,7 +223,7 @@ export default function BitssRetailPacks() {
 
               {/* Subscription Periods */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="mb-3 text-lg font-semibold text-gray-900">
                   Select Subscription Period
                 </h3>
                 <div className="space-y-2">
@@ -245,10 +246,10 @@ export default function BitssRetailPacks() {
                             setFormErrors((prev) => ({ ...prev, period: "" }));
                           }
                         }}
-                        className={`w-full p-4 rounded-lg border-2 transition-all ${
+                        className={`w-full rounded-lg border-2 p-4 transition-all ${
                           isSelected
                             ? "border-red-600 bg-red-50 shadow-md"
-                            : "border-gray-200 hover:border-red-300 bg-white"
+                            : "border-gray-200 bg-white hover:border-red-300"
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -257,7 +258,7 @@ export default function BitssRetailPacks() {
                               {period.duration} Months
                             </p>
                             {period.amount > 0 && (
-                              <p className="text-sm text-green-600 font-medium">
+                              <p className="text-sm font-medium text-green-600">
                                 Save {period.amount}
                                 {period.discount_type === "percent" ? "%" : "€"}
                               </p>
@@ -279,7 +280,7 @@ export default function BitssRetailPacks() {
                   })}
                 </div>
                 {formErrors.period && (
-                  <p className="text-red-500 text-sm mt-2">
+                  <p className="mt-2 text-sm text-red-500">
                     {formErrors.period}
                   </p>
                 )}
@@ -288,15 +289,15 @@ export default function BitssRetailPacks() {
           </div>
 
           {/* Order Form Card */}
-          <div className="bg-white rounded shadow p-6 lg:p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
+          <div className="rounded bg-white p-6 shadow lg:p-8">
+            <h3 className="mb-6 text-2xl font-bold text-gray-900">
               Delivery Information
             </h3>
 
             <div className="space-y-5">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -304,19 +305,19 @@ export default function BitssRetailPacks() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 ${
+                  className={`w-full rounded-lg border px-4 py-3 focus:ring-2 focus:ring-red-500 focus:outline-none ${
                     formErrors.name ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="John Doe"
                 />
                 {formErrors.name && (
-                  <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+                  <p className="mt-1 text-sm text-red-500">{formErrors.name}</p>
                 )}
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Email Address <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -324,13 +325,13 @@ export default function BitssRetailPacks() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 ${
+                  className={`w-full rounded-lg border px-4 py-3 focus:ring-2 focus:ring-red-500 focus:outline-none ${
                     formErrors.email ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="john.doe@example.com"
                 />
                 {formErrors.email && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="mt-1 text-sm text-red-500">
                     {formErrors.email}
                   </p>
                 )}
@@ -338,7 +339,7 @@ export default function BitssRetailPacks() {
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Phone Number <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -346,13 +347,13 @@ export default function BitssRetailPacks() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 ${
+                  className={`w-full rounded-lg border px-4 py-3 focus:ring-2 focus:ring-red-500 focus:outline-none ${
                     formErrors.phone ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="+1 234 567 8900"
                 />
                 {formErrors.phone && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="mt-1 text-sm text-red-500">
                     {formErrors.phone}
                   </p>
                 )}
@@ -360,7 +361,7 @@ export default function BitssRetailPacks() {
 
               {/* Country */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Country <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -368,13 +369,13 @@ export default function BitssRetailPacks() {
                   name="country"
                   value={formData.country}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 ${
+                  className={`w-full rounded-lg border px-4 py-3 focus:ring-2 focus:ring-red-500 focus:outline-none ${
                     formErrors.country ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="United States"
                 />
                 {formErrors.country && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="mt-1 text-sm text-red-500">
                     {formErrors.country}
                   </p>
                 )}
@@ -382,7 +383,7 @@ export default function BitssRetailPacks() {
 
               {/* Address */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Full Address <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -390,21 +391,21 @@ export default function BitssRetailPacks() {
                   value={formData.address}
                   onChange={handleInputChange}
                   rows="3"
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none ${
+                  className={`w-full resize-none rounded-lg border px-4 py-3 focus:ring-2 focus:ring-red-500 focus:outline-none ${
                     formErrors.address ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Street address, apartment, suite, unit, building, floor, etc."
                 />
                 {formErrors.address && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="mt-1 text-sm text-red-500">
                     {formErrors.address}
                   </p>
                 )}
               </div>
 
               {/* Order Summary */}
-              <div className="bg-gradient-to-r from-red-50 to-indigo-50 p-4 rounded-lg border border-red-200">
-                <div className="flex items-center justify-between mb-2">
+              <div className="rounded-lg border border-red-200 bg-linear-to-r from-red-50 to-indigo-50 p-4">
+                <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">
                     Selected Period:
                   </span>
@@ -412,7 +413,7 @@ export default function BitssRetailPacks() {
                     {selectedPeriod?.duration || "N/A"} Months
                   </span>
                 </div>
-                <div className="flex items-center justify-between mb-2">
+                <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">
                     Discount:
                   </span>
@@ -421,7 +422,7 @@ export default function BitssRetailPacks() {
                     {selectedPeriod?.discount_type === "percent" ? "%" : "$"}
                   </span>
                 </div>
-                <div className="pt-2 border-t border-red-200 flex items-center justify-between">
+                <div className="flex items-center justify-between border-t border-red-200 pt-2">
                   <span className="text-base font-bold text-gray-900">
                     Total Price:
                   </span>
@@ -436,7 +437,7 @@ export default function BitssRetailPacks() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="w-full bg-gradient-to-r from-red-600 to-indigo-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-red-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-linear-to-r from-red-600 to-indigo-600 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:from-red-700 hover:to-indigo-700 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {submitting ? (
                   <>
@@ -451,7 +452,7 @@ export default function BitssRetailPacks() {
                 )}
               </button>
 
-              <p className="text-xs text-center text-gray-500 mt-4">
+              <p className="mt-4 text-center text-xs text-gray-500">
                 By placing this order, you agree to our terms and conditions.
                 We&apos;ll contact you within 24-48 hours to confirm your order.
               </p>
@@ -460,18 +461,19 @@ export default function BitssRetailPacks() {
         </div>
 
         {/* Product Description Here   */}
-        <h5 className="text-3xl font-semibold text-gray-900 mt-16 mb-8 text-center">
-          Learn more about <span className="text-primary">{product?.name}</span>{" "}
+        <h5 className="mt-16 mb-8 text-center text-3xl font-semibold text-gray-900">
+          Learn more about{" "}
+          <span className="text-primary">{product?.name}</span>{" "}
         </h5>
         <div dangerouslySetInnerHTML={{ __html: product?.description }} />
 
         {/* Additional Info */}
-        <div className="mt-12 bg-white rounded-2xl shadow-xl p-8">
-          <div className="grid md:grid-cols-3 gap-6 text-center">
+        <div className="mt-12 rounded-2xl bg-white p-8 shadow-xl">
+          <div className="grid gap-6 text-center md:grid-cols-3">
             <div>
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
                 <svg
-                  className="w-6 h-6 text-red-600"
+                  className="h-6 w-6 text-red-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -484,7 +486,7 @@ export default function BitssRetailPacks() {
                   />
                 </svg>
               </div>
-              <h4 className="font-semibold text-gray-900 mb-1">
+              <h4 className="mb-1 font-semibold text-gray-900">
                 Secure Payment
               </h4>
               <p className="text-sm text-gray-600">
@@ -492,9 +494,9 @@ export default function BitssRetailPacks() {
               </p>
             </div>
             <div>
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                 <svg
-                  className="w-6 h-6 text-green-600"
+                  className="h-6 w-6 text-green-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -507,7 +509,7 @@ export default function BitssRetailPacks() {
                   />
                 </svg>
               </div>
-              <h4 className="font-semibold text-gray-900 mb-1">
+              <h4 className="mb-1 font-semibold text-gray-900">
                 Fast Delivery
               </h4>
               <p className="text-sm text-gray-600">
@@ -515,9 +517,9 @@ export default function BitssRetailPacks() {
               </p>
             </div>
             <div>
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
                 <svg
-                  className="w-6 h-6 text-purple-600"
+                  className="h-6 w-6 text-purple-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -530,7 +532,7 @@ export default function BitssRetailPacks() {
                   />
                 </svg>
               </div>
-              <h4 className="font-semibold text-gray-900 mb-1">24/7 Support</h4>
+              <h4 className="mb-1 font-semibold text-gray-900">24/7 Support</h4>
               <p className="text-sm text-gray-600">
                 We&apos;re here to help anytime
               </p>
@@ -538,6 +540,6 @@ export default function BitssRetailPacks() {
           </div>
         </div>
       </div>
-    </div>
+    </SectionContainer>
   );
 }

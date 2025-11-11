@@ -1,6 +1,6 @@
 export default function PrivacyPolicy() {
   return (
-    <section className="mx-auto w-full max-w-5xl px-5 py-10 md:py-20">
+    <section className="mx-auto max-w-7xl bg-white p-6 text-gray-900">
       <h1 className="mb-4 text-center text-3xl font-semibold">
         Privacy Policy
       </h1>
@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
       </p>
 
       <h2 className="text-xl font-semibold">Introduction</h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         Welcome to our website and platform. This Privacy Policy outlines how we
         collect, use, disclose, and protect your personal information when you
         access our website and use our services. Your privacy and the security
@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
       </p>
 
       <h2 className="mt-8 text-xl font-semibold">Data We Collect</h2>
-      <ul className="ml-5 mt-4 list-disc">
+      <ul className="mt-4 ml-5 list-disc">
         <li>
           <h4 className="mb-2 font-semibold">Personal Information</h4>
           <p className="w-full max-w-3xl text-sm">
@@ -30,7 +30,7 @@ export default function PrivacyPolicy() {
           </p>
         </li>
         <li>
-          <h4 className="mb-1.5 mt-4 font-semibold">Usage Data</h4>
+          <h4 className="mt-4 mb-1.5 font-semibold">Usage Data</h4>
           <p className="w-full max-w-3xl text-sm">
             We may automatically collect certain information about your visit to
             our website, including your IP address, device information, browser
@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
           </p>
         </li>
         <li>
-          <h4 className="mb-1.5 mt-4 font-semibold">
+          <h4 className="mt-4 mb-1.5 font-semibold">
             Cookies and Similar Technologies
           </h4>
           <p className="w-full max-w-3xl text-sm">
@@ -55,7 +55,7 @@ export default function PrivacyPolicy() {
       <h2 className="mt-8 text-xl font-semibold">
         Usage of Your Personal Data
       </h2>
-      <ul className="ml-5 mt-4 list-disc">
+      <ul className="mt-4 ml-5 list-disc">
         <li>
           <h4 className="mb-2 font-semibold">Providing Services</h4>
           <p className="w-full max-w-3xl text-sm">
@@ -65,7 +65,7 @@ export default function PrivacyPolicy() {
           </p>
         </li>
         <li>
-          <h4 className="mb-1.5 mt-4 font-semibold">
+          <h4 className="mt-4 mb-1.5 font-semibold">
             Improving User Experience
           </h4>
           <p className="w-full max-w-3xl text-sm">
@@ -75,7 +75,7 @@ export default function PrivacyPolicy() {
           </p>
         </li>
         <li>
-          <h4 className="mb-1.5 mt-4 font-semibold">Communication</h4>
+          <h4 className="mt-4 mb-1.5 font-semibold">Communication</h4>
           <p className="w-full max-w-3xl text-sm">
             We may use your contact information to respond to your inquiries,
             provide updates about our services, and send relevant marketing
@@ -87,7 +87,7 @@ export default function PrivacyPolicy() {
       <h2 className="mt-8 text-xl font-semibold">
         Sharing and Disclosure of Your Data
       </h2>
-      <ul className="ml-5 mt-4 list-disc">
+      <ul className="mt-4 ml-5 list-disc">
         <li>
           <h4 className="mb-2 font-semibold">Third-Party Service Providers</h4>
           <p className="w-full max-w-3xl text-sm">
@@ -99,7 +99,7 @@ export default function PrivacyPolicy() {
           </p>
         </li>
         <li>
-          <h4 className="mb-2 mt-4 font-semibold">Legal Compliance</h4>
+          <h4 className="mt-4 mb-2 font-semibold">Legal Compliance</h4>
           <p className="w-full max-w-3xl text-sm">
             We may disclose your personal information when required by law, in
             response to a court order, legal process, or to comply with
@@ -109,7 +109,7 @@ export default function PrivacyPolicy() {
       </ul>
 
       <h2 className="mt-8 text-xl font-semibold">Data Safety and Security</h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         We implement industry-standard security measures to protect your
         personal information from unauthorized access, loss, alteration, or
         disclosure. However, please note that no data transmission over the
@@ -119,7 +119,7 @@ export default function PrivacyPolicy() {
       <h2 className="mt-8 text-xl font-semibold">
         Control Over Your Information
       </h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         You have the right to access, update, or delete your personal
         information, and you may opt-out of marketing communications at any
         time. To exercise these rights or for any privacy-related queries,
@@ -131,14 +131,14 @@ export default function PrivacyPolicy() {
       </p>
 
       <h2 className="mt-8 text-xl font-semibold">Privacy Policy Updates</h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         We may update this Privacy Policy periodically to reflect changes in our
         practices or legal requirements. We will post the updated version on our
         website with the revised effective date.
       </p>
 
       <h2 className="mt-8 text-xl font-semibold">Contact Support</h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         If you have any questions or concerns about our Privacy Policy or our
         privacy practices, please contact us at:
         <a href="mailto:support@bobosohomail.com" className="text-primary">

@@ -3,11 +3,11 @@ import { ArrowRight } from "lucide-react";
 
 export default function Contact() {
   return (
-    <section className="relative bg-cover bg-center bg-no-repeat px-5 py-10 md:container md:mx-auto md:py-20 bg-red-50 rounded">
-      <h2 className="mb-6 text-balance text-center text-3xl font-bold leading-[3.15rem] md:text-[2.5rem]">
+    <section className="relative w-full rounded bg-red-50 bg-cover bg-center bg-no-repeat px-5 py-10 md:mx-auto md:max-w-7xl md:px-0 md:py-20">
+      <h2 className="mb-6 text-center text-3xl leading-[3.15rem] font-bold text-balance md:text-[2.5rem]">
         Which Cybersecurity Solution is Best for you?
       </h2>
-      <p className="mb-20 w-full text-balance text-center text-xl font-light">
+      <p className="mb-20 w-full text-center text-xl font-light text-balance">
         Still unsure? Let us help you find the perfect solution—reach out to us
         or explore our FAQ!
       </p>
@@ -16,7 +16,7 @@ export default function Contact() {
         <Link
           href="/contact"
           className={
-            "text-custom-white group inline-flex items-center rounded-full bg-primary px-4 py-2.5 text-lg font-medium transition-all duration-200 ease-in-out"
+            "text-custom-white group bg-primary inline-flex items-center rounded-full px-4 py-2.5 text-lg font-medium transition-all duration-200 ease-in-out"
           }
         >
           <span className="flex items-center px-3">

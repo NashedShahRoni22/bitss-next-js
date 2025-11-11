@@ -10,7 +10,7 @@ export default function Solutions() {
     setActiveTab(i);
   };
   return (
-    <section className="px-5 py-10 text-center md:container md:mx-auto md:py-20">
+    <section className="w-full px-5 py-10 text-center md:mx-auto md:max-w-7xl md:px-0 md:py-20">
       <h2 className="mb-14 text-center text-3xl font-bold md:text-[2.5rem]">
         Why Bitss is the Ultimate Solution for Website Security
       </h2>
@@ -33,7 +33,7 @@ export default function Solutions() {
             className={`cursor-pointer rounded-full px-6 py-1.5 text-center text-xl transition-all duration-200 ease-in-out ${
               activeTab === i
                 ? "bg-primary text-custom-white"
-                : "hover:bg-[#F83A53] hover:text-custom-white"
+                : "hover:text-custom-white hover:bg-[#F83A53]"
             }`}
             onClick={() => handleTabClick(i)}
           >
@@ -63,7 +63,7 @@ export default function Solutions() {
             <ul className="space-y-4 font-light">
               {tabsData[activeTab].content.map((item, index) => (
                 <li key={index} className="flex gap-2">
-                  <Check className="mt-1.5 min-w-fit text-primary" />
+                  <Check className="text-primary mt-1.5 min-w-fit" />
                   <span>{item}</span>
                 </li>
               ))}

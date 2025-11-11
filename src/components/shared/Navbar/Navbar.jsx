@@ -19,7 +19,7 @@ export default function Navbar() {
         pageLanguage: "en",
         autoDisplay: false,
       },
-      "google_translate_element"
+      "google_translate_element",
     );
   };
 
@@ -27,7 +27,7 @@ export default function Navbar() {
     var addScript = document.createElement("script");
     addScript.setAttribute(
       "src",
-      "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+      "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit",
     );
     document.body.appendChild(addScript);
     window.googleTranslateElementInit = googleTranslateElementInit;
@@ -45,14 +45,14 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="border-b border-[#C5D6E0] sticky top-0 z-50 bg-white">
+    <nav className="sticky top-0 z-50 border-b border-[#C5D6E0] bg-white">
       {/* TODO: uncomment this component */}
       {/* <div
         id="google_translate_element"
         className="mx-auto hidden w-fit lg:block"
       ></div> */}
 
-      <div className="relative flex w-full items-center justify-between px-5 max-w-7xl mx-auto">
+      <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between px-5 md:px-0">
         {/* Logo */}
         <div>
           <Link href="/">
@@ -74,7 +74,7 @@ export default function Navbar() {
               {link.path ? (
                 <Link
                   href={link.path}
-                  className={`text-sm capitalize transition-all duration-200 ease-in-out hover:text-primary ${
+                  className={`hover:text-primary text-sm capitalize transition-all duration-200 ease-in-out ${
                     (link.categories || link.children) &&
                     "flex items-center gap-1"
                   }`}
@@ -86,7 +86,7 @@ export default function Navbar() {
                 </Link>
               ) : (
                 <button
-                  className={`text-sm capitalize transition-all duration-200 ease-in-out hover:text-primary ${
+                  className={`hover:text-primary text-sm capitalize transition-all duration-200 ease-in-out ${
                     (link.categories || link.children) &&
                     "flex items-center gap-1"
                   }`}
@@ -100,7 +100,7 @@ export default function Navbar() {
 
               {/* Dropdown for Products */}
               {link.categories && (
-                <div className="absolute bg-white left-0 top-full z-10 hidden min-w-2xl grid-cols-2 rounded-lg shadow-custom-1 group-hover:grid">
+                <div className="shadow-custom-1 absolute top-full left-0 z-10 hidden min-w-2xl grid-cols-2 rounded-lg bg-white group-hover:grid">
                   {link.categories.map((category, j) => (
                     <div
                       key={j}
@@ -110,7 +110,7 @@ export default function Navbar() {
                         j > 1 ? "col-span-2" : "col-span-1"
                       }`}
                     >
-                      <div className="mb-3 flex gap-1.5 h-10 w-full relative">
+                      <div className="relative mb-3 flex h-10 w-full gap-1.5">
                         <Image
                           src={category.icon}
                           alt={category.title}
@@ -128,7 +128,7 @@ export default function Navbar() {
                           <Link
                             key={k}
                             href={product.path}
-                            className="flex max-w-fit flex-wrap gap-1 text-sm capitalize transition-all duration-200 ease-in-out hover:text-primary"
+                            className="hover:text-primary flex max-w-fit flex-wrap gap-1 text-sm capitalize transition-all duration-200 ease-in-out"
                           >
                             <Dot className="min-w-fit text-lg" />
                             {product.name}{" "}
@@ -149,12 +149,12 @@ export default function Navbar() {
 
               {/* Dropdown for Children */}
               {link.children && (
-                <div className="absolute left-0 top-full z-10 hidden min-w-max grid-cols-1 gap-4 rounded-lg bg-white px-6 py-4 shadow-custom-1 group-hover:grid">
+                <div className="shadow-custom-1 absolute top-full left-0 z-10 hidden min-w-max grid-cols-1 gap-4 rounded-lg bg-white px-6 py-4 group-hover:grid">
                   {link.children.map((subLink, j) => (
                     <Link
                       key={j}
                       href={subLink.link}
-                      className="block text-sm capitalize transition-all duration-200 ease-in-out hover:text-primary"
+                      className="hover:text-primary block text-sm capitalize transition-all duration-200 ease-in-out"
                     >
                       {subLink.name}
                     </Link>
@@ -171,7 +171,7 @@ export default function Navbar() {
         ) : (
           <Link
             href="/login"
-            className="hidden rounded bg-primary p-2 px-4 text-sm font-medium text-white transition-all duration-200 ease-in-out hover:bg-primary-hover md:block"
+            className="bg-primary hover:bg-primary-hover hidden rounded p-2 px-4 text-sm font-medium text-white transition-all duration-200 ease-in-out md:block"
           >
             Login
           </Link>

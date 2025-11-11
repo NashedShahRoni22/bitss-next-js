@@ -33,7 +33,7 @@ const cookiesType = [
 
 function CookiePolicy() {
   return (
-    <section className="mx-auto w-full max-w-5xl px-5 py-10 md:py-20">
+    <section className="mx-auto max-w-7xl bg-white p-6 text-gray-900">
       <h1 className="mb-4 text-center text-3xl font-semibold">
         Cookies Policy
       </h1>
@@ -46,7 +46,7 @@ function CookiePolicy() {
       <h2 className="text-xl font-semibold">
         What are Cookies and how do we use them?
       </h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         Cookies are small pieces of text stored in web browsers to save
         information about your interactions with websites. They are used to
         store and receive identifiers and other data on your computer, phone, or
@@ -64,7 +64,7 @@ function CookiePolicy() {
       <h2 className="mt-8 text-xl font-semibold">
         Understanding Cookies on Our Website
       </h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         We use cookies to enhance your experience and deliver essential features
         on our platform. These cookies help us provide functionality, improve
         performance, and offer tailored services.
@@ -80,7 +80,7 @@ function CookiePolicy() {
       <h2 className="mt-8 text-xl font-semibold">
         How can you manage Cookies?
       </h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         You have control over cookies through your browser settings, allowing
         you to prevent their storage or remove them at any time. Refer to your
         browser’s Help section for guidance on managing cookies.
@@ -131,7 +131,7 @@ function CookiePolicy() {
           </p>
         </li>
         <li>
-          <h4 className="mb-1.5 mt-4 font-semibold">
+          <h4 className="mt-4 mb-1.5 font-semibold">
             Social Media Integration Cookies
           </h4>
           <p className="w-full max-w-3xl text-sm">
@@ -146,7 +146,7 @@ function CookiePolicy() {
       </ul>
 
       <h2 className="mt-8 text-xl font-semibold">Need More Information?</h2>
-      <p className="mb-2.5 mt-4">
+      <p className="mt-4 mb-2.5">
         If you need additional assistance, feel free to contact us at:
       </p>
       <p>

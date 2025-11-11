@@ -6,8 +6,8 @@ const dotShapes = "/images/shapes/dot-grid.svg";
 
 export default function SolutionHighlights() {
   return (
-    <section className="overflow-hidden px-5 py-10 md:container md:mx-auto md:rounded-[2.5rem] md:px-10 md:py-20">
-      <h2 className="text-balance text-3xl font-bold leading-[3.15rem] md:text-[2.5rem]">
+    <section className="w-full overflow-hidden px-5 py-10 md:mx-auto md:max-w-7xl md:rounded-[2.5rem] md:px-0 md:py-20">
+      <h2 className="text-3xl leading-[3.15rem] font-bold text-balance md:text-[2.5rem]">
         Comprehensive Security Solutions
       </h2>
       <p className="my-4">
@@ -19,7 +19,7 @@ export default function SolutionHighlights() {
       <Link
         href="/products"
         className={
-          "group mb-10 inline-flex w-fit items-center rounded-xl border-2 border-primary bg-primary px-4 py-2.5 font-medium text-custom-white transition-all duration-200 ease-in-out"
+          "group border-primary bg-primary text-custom-white mb-10 inline-flex w-fit items-center rounded-xl border-2 px-4 py-2.5 font-medium transition-all duration-200 ease-in-out"
         }
       >
         <span className="flex items-center px-3">
@@ -37,13 +37,13 @@ export default function SolutionHighlights() {
           alt="dot grid shapes"
           width={112}
           height={112}
-          className="absolute -right-6 -top-11 size-28 opacity-0 md:opacity-50"
+          className="absolute -top-11 -right-6 size-28 opacity-0 md:opacity-50"
         />
         <div className="relative grid grid-cols-1 gap-4 py-6 md:grid-cols-2 lg:grid-cols-3">
           {highlitedSolutions.map((solution, i) => (
             <div
               key={i}
-              className="rounded-xl border border-primary/20 bg-custom-white p-5"
+              className="border-primary/20 bg-custom-white rounded-xl border p-5"
             >
               <Image
                 src={solution.icon}
@@ -54,7 +54,7 @@ export default function SolutionHighlights() {
                 className="mb-3 h-auto w-8 md:w-10"
               />
               <h4 className="text-[1.375rem] font-medium">{solution.title}</h4>
-              <p className="mb-12 mt-2 text-lg font-light">
+              <p className="mt-2 mb-12 text-lg font-light">
                 {solution.overview}
               </p>
             </div>

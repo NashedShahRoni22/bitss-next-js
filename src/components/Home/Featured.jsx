@@ -8,11 +8,11 @@ export default function Featured() {
       {featuresData.map((feat, i) => (
         <section
           key={i}
-          className={`flex flex-col justify-between gap-8 px-5 py-10 md:container md:mx-auto md:items-center md:gap-16 md:py-20 ${
+          className={`flex w-full flex-col justify-between gap-8 px-5 py-10 md:mx-auto md:max-w-7xl md:items-center md:gap-16 md:px-0 md:py-20 ${
             i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-          } ${i % 2 === 0 ? "bg-red-50 rounded" : "bg-none"}`}
+          } ${i % 2 === 0 ? "rounded bg-red-50" : "bg-none"}`}
         >
-          <div className="w-full lg:w-1/2 md:text-left">
+          <div className="w-full md:text-left lg:w-1/2">
             <div className="mb-3 flex flex-col gap-2.5 md:hidden md:justify-center">
               <Image src={feat.icon} alt={feat.name} width={48} height={48} />
               <p className="font-medium">{feat.name}</p>
@@ -31,7 +31,7 @@ export default function Featured() {
             </div>
           </div>
 
-          <div className="w-full lg:w-1/2 md:text-left">
+          <div className="w-full md:text-left lg:w-1/2">
             <div className="mb-4 hidden gap-2.5 md:flex md:flex-col">
               <Image
                 src={feat.icon}
@@ -42,18 +42,18 @@ export default function Featured() {
               />
               <p className="text-lg font-bold">{feat.name}</p>
             </div>
-            <h2 className="hidden text-balance text-3xl font-bold leading-[3.15rem] md:block md:text-[2.5rem]">
+            <h2 className="hidden text-3xl leading-[3.15rem] font-bold text-balance md:block md:text-[2.5rem]">
               {feat.title}
             </h2>
-            <p className="mt-4 text-balance text-lg font-light leading-7">
+            <p className="mt-4 text-lg leading-7 font-light text-balance">
               {feat.overview}
             </p>
 
             {feat.features && (
-              <ul className="space-y-2 font-light mt-4">
+              <ul className="mt-4 space-y-2 font-light">
                 {feat.features.map((li, i) => (
                   <li key={i} className="flex gap-2">
-                    <Check className="mt-1.5 min-w-fit text-primary" />
+                    <Check className="text-primary mt-1.5 min-w-fit" />
                     <span>{li}</span>
                   </li>
                 ))}
