@@ -9,8 +9,14 @@ import {
   Shield,
 } from "lucide-react";
 import SectionContainer from "@/components/shared/SectionContainer";
+import { postApi } from "@/api/api";
+import useAuth from "@/hooks/useAuth";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function BitssRetailPacks() {
+  const router = useRouter();
+  const { authInfo } = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -98,34 +104,51 @@ export default function BitssRetailPacks() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!authInfo?.access_token) {
+      return router.push("/login?redirect=/bitss-retail-packs");
+    }
 
     if (!validateForm()) return;
 
     setSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Order submitted:", {
-        ...formData,
-        product_id: product._id,
-        product_name: product.name,
-        period: selectedPeriod,
-        total_price: calculatePrice(),
-      });
-      alert("Order placed successfully! We'll contact you soon.");
-      setSubmitting(false);
+    try {
+      const payload = {
+        full_name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        country: formData.country,
+        address: formData.address,
+        package_name: product.name,
+        duration: selectedPeriod.duration,
+        package_price: calculatePrice(),
+      };
 
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        country: "",
-        address: "",
+      const response = await postApi({
+        endpoint: "/orders/order/retail/package",
+        payload,
+        token: authInfo?.access_token,
       });
-    }, 2000);
+
+      if (response.success) {
+        toast.success("Order placed successfully! We'll contact you soon.");
+        setSubmitting(false);
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          country: "",
+          address: "",
+        });
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Something went wrong while processing your order.");
+    }
   };
 
   const handleInputChange = (e) => {
