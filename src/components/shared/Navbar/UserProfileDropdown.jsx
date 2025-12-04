@@ -1,7 +1,15 @@
+'use client'
+
 import { useEffect, useRef, useState } from "react";
-import useAuth from "@/hooks/useAuth";
+import {
+  ChevronDown,
+  KeyRound,
+  Package,
+  ShoppingCart,
+  User,
+} from "lucide-react";
 import useCart from "@/hooks/useCart";
-import { ChevronDown, Package, ShoppingCart, User } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
 
 export default function UserProfileDropdown() {
@@ -64,7 +72,7 @@ export default function UserProfileDropdown() {
             Welcome, {authInfo?.user?.name?.split(" ")[0] || "User"}
           </span>
           <ChevronDown
-            className={`transition-transform duration-200 ${
+            className={`h-4 w-4 transition-transform duration-200 ${
               isDropdownOpen ? "rotate-180" : ""
             }`}
           />
@@ -80,7 +88,7 @@ export default function UserProfileDropdown() {
                 className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100"
                 onClick={() => setIsDropdownOpen(false)}
               >
-                <User className="mr-3" />
+                <User className="mr-3 h-4 w-4" />
                 Profile
               </Link>
 
@@ -90,7 +98,7 @@ export default function UserProfileDropdown() {
                 className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100"
                 onClick={() => setIsDropdownOpen(false)}
               >
-                <Package className="mr-3" />
+                <Package className="mr-3 h-4 w-4" />
                 My Orders
               </Link>
 
@@ -100,15 +108,25 @@ export default function UserProfileDropdown() {
                 className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100"
                 onClick={() => setIsDropdownOpen(false)}
               >
-                <ShoppingCart className="mr-3" />
+                <ShoppingCart className="mr-3 h-4 w-4" />
                 Cart{" "}
                 {cartItems.length > 0 ? (
-                  <span className="size-4 ml-2 animate-pulse bg-primary rounded-full text-white text-xs flex justify-center items-center">
+                  <span className="ml-2 flex size-4 animate-pulse items-center justify-center rounded-full bg-primary text-xs text-white">
                     {cartItems.length}
                   </span>
                 ) : (
                   ""
                 )}
+              </Link>
+
+              {/* Cart Link */}
+              <Link
+                href="/activate-license"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100"
+                onClick={() => setIsDropdownOpen(false)}
+              >
+                <KeyRound className="mr-3 h-4 w-4" />
+                Activate License
               </Link>
 
               {/* Divider */}

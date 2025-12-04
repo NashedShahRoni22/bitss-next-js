@@ -47,10 +47,10 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b border-[#C5D6E0] bg-white">
       {/* TODO: uncomment this component */}
-      {/* <div
+      <div
         id="google_translate_element"
         className="mx-auto hidden w-fit lg:block"
-      ></div> */}
+      ></div>
 
       <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between px-5 md:px-0">
         {/* Logo */}
