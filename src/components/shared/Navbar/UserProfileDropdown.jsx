@@ -1,10 +1,11 @@
-'use client'
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   KeyRound,
   Package,
+  RefreshCw,
   ShoppingCart,
   User,
 } from "lucide-react";
@@ -63,7 +64,7 @@ export default function UserProfileDropdown() {
           className="flex items-center space-x-2 rounded-lg p-2 text-gray-700 transition-colors duration-200 hover:bg-gray-100"
         >
           {/* User Initials Circle */}
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+          <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium text-white">
             {getInitials(authInfo?.user?.name)}
           </div>
 
@@ -111,7 +112,7 @@ export default function UserProfileDropdown() {
                 <ShoppingCart className="mr-3 h-4 w-4" />
                 Cart{" "}
                 {cartItems.length > 0 ? (
-                  <span className="ml-2 flex size-4 animate-pulse items-center justify-center rounded-full bg-primary text-xs text-white">
+                  <span className="bg-primary ml-2 flex size-4 animate-pulse items-center justify-center rounded-full text-xs text-white">
                     {cartItems.length}
                   </span>
                 ) : (
@@ -119,7 +120,7 @@ export default function UserProfileDropdown() {
                 )}
               </Link>
 
-              {/* Cart Link */}
+              {/* license active */}
               <Link
                 href="/activate-license"
                 className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100"
@@ -127,6 +128,15 @@ export default function UserProfileDropdown() {
               >
                 <KeyRound className="mr-3 h-4 w-4" />
                 Activate License
+              </Link>
+
+              <Link
+                href="/renew-orders"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100"
+                onClick={() => setIsDropdownOpen(false)}
+              >
+                <RefreshCw className="mr-3 h-4 w-4" />
+                Renew Orders
               </Link>
 
               {/* Divider */}
