@@ -15,6 +15,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
+import Link from "next/link";
 
 export default function RenewOrders() {
   const { authInfo } = useAuth();
@@ -24,8 +25,10 @@ export default function RenewOrders() {
   const [sortBy, setSortBy] = useState("newest"); // newest, oldest
 
   useEffect(() => {
-    fetchRenewOrders();
-  }, []);
+    if (authInfo?.access_token) {
+      fetchRenewOrders();
+    }
+  }, [authInfo?.access_token]);
 
   const fetchRenewOrders = async () => {
     setLoading(true);
@@ -242,9 +245,6 @@ export default function RenewOrders() {
                   {/* Badge for issues count */}
                   <div className="bg-accent flex items-center justify-between px-4 py-2">
                     <div className="flex items-center gap-2">
-                      <span className="bg-primary rounded px-2 py-1 text-xs font-semibold text-white">
-                        1 ISSUE
-                      </span>
                       <span className="text-sm font-medium text-white">
                         Order #{invoice.order_number}
                       </span>
@@ -376,15 +376,13 @@ export default function RenewOrders() {
                         )}
                       </div>
 
-                      <button
-                        onClick={() =>
-                          (window.location.href = `/dashboard/renew/invoice/${invoice._id}`)
-                        }
+                      <Link
+                        href={`/renew-orders/${invoice._id}`}
                         className="bg-primary hover:bg-primary-hover flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-white transition-colors"
                       >
                         <Eye className="h-4 w-4" />
                         View Order Details
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
