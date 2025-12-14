@@ -86,24 +86,19 @@ export default function RenewOrderDetails() {
     setProcessingPayment(true);
     try {
       const response = await fetch(
-        "https://backend.bitss.one/api/v1/payment/stripe/renew",
+        `https://backend.bitss.one/api/v1/orders/order/renew/stripe/payment?invoice_id=${invoiceId}`,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${authInfo?.access_token}`,
           },
-          body: JSON.stringify({
-            invoice_id: invoiceId,
-            order_id: orderData.invoice.order.id,
-          }),
         },
       );
 
       const data = await response.json();
 
-      if (data.checkout_url) {
-        window.location.href = data.checkout_url;
+      if (data?.success) {
+        window.location.href = data?.data?.session?.url;
       }
     } catch (err) {
       console.error("Stripe payment error:", err);
