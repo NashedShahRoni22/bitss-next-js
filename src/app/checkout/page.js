@@ -91,24 +91,15 @@ const convertCartItems = (cartItems) => {
 };
 
 function generateOrderId() {
-  const prefix = "BITSS";
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const random4Digit = String(Math.floor(Math.random() * 10000)).padStart(
+    4,
+    "0",
+  );
 
-  // Get current date
-  const date = new Date();
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = String(date.getFullYear()).slice(-2); // last 2 digits of year
-
-  const datePart = `${day}${month}${year}`;
-
-  // Generate 6-letter random string (A–Z)
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let randomStr = "";
-  for (let i = 0; i < 6; i++) {
-    randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-
-  return `${prefix}${datePart}${randomStr}`;
+  return `${year}${month}-${random4Digit}`;
 }
 
 const Checkout = () => {

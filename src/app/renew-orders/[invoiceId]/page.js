@@ -12,6 +12,11 @@ import {
   Clock,
   CreditCard,
   Globe,
+  RefreshCw,
+  Building2,
+  Copy,
+  Check,
+  AlertCircle,
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
@@ -21,6 +26,10 @@ export default function RenewOrderDetails() {
   const { authInfo } = useAuth();
   const [orderData, setOrderData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedPayment, setSelectedPayment] = useState("stripe");
+  const [processingPayment, setProcessingPayment] = useState(false);
+  const [copiedField, setCopiedField] = useState(null);
+  const [showRenewSection, setShowRenewSection] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +63,60 @@ export default function RenewOrderDetails() {
       month: "long",
       day: "numeric",
     });
+  };
+
+  const handleCopy = (text, field) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  const handleRenewOrder = () => {
+    setShowRenewSection(true);
+    // Scroll to payment section
+    setTimeout(() => {
+      document.getElementById("payment-section")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  };
+
+  const handleStripePayment = async () => {
+    setProcessingPayment(true);
+    try {
+      const response = await fetch(
+        "https://backend.bitss.one/api/v1/payment/stripe/renew",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authInfo?.access_token}`,
+          },
+          body: JSON.stringify({
+            invoice_id: invoiceId,
+            order_id: orderData.invoice.order.id,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      }
+    } catch (err) {
+      console.error("Stripe payment error:", err);
+      alert("Failed to process Stripe payment. Please try again.");
+    } finally {
+      setProcessingPayment(false);
+    }
+  };
+
+  const bankDetails = {
+    bankName: "LCL Bank France",
+    iban: "FR62 3000 2030 3700 0007 3125 M63",
+    bic: "CRLYFRPP",
   };
 
   if (loading) {
@@ -92,6 +155,15 @@ export default function RenewOrderDetails() {
               </h1>
               <p className="mt-1 text-gray-500">Order #{order.order_number}</p>
             </div>
+            {!invoice.paid && !showRenewSection && (
+              <button
+                onClick={handleRenewOrder}
+                className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700"
+              >
+                <RefreshCw className="h-5 w-5" />
+                Renew Order
+              </button>
+            )}
           </div>
         </div>
 
@@ -119,6 +191,190 @@ export default function RenewOrderDetails() {
               </div>
             </div>
           </div>
+
+          {/* Payment Method Section - Show when Renew Order is clicked */}
+          {showRenewSection && !invoice.paid && (
+            <div
+              id="payment-section"
+              className="mb-6 rounded-lg bg-white p-6 shadow-sm"
+            >
+              <h2 className="mb-6 text-xl font-semibold text-gray-900">
+                Payment Method
+              </h2>
+
+              <div className="mb-6 space-y-4">
+                {/* Stripe Option */}
+                <label
+                  className={`flex cursor-pointer items-start gap-4 rounded-lg border-2 p-4 transition-all ${
+                    selectedPayment === "stripe"
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="stripe"
+                    checked={selectedPayment === "stripe"}
+                    onChange={(e) => setSelectedPayment(e.target.value)}
+                    className="mt-1"
+                  />
+                  <div className="flex-1">
+                    <div className="mb-1 flex items-center gap-2">
+                      <CreditCard className="h-5 w-5 text-blue-600" />
+                      <span className="font-semibold text-gray-900">
+                        Stripe
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Pay securely with credit/debit card
+                    </p>
+                  </div>
+                </label>
+
+                {/* Bank Transfer Option */}
+                <label
+                  className={`flex cursor-pointer items-start gap-4 rounded-lg border-2 p-4 transition-all ${
+                    selectedPayment === "bank"
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="bank"
+                    checked={selectedPayment === "bank"}
+                    onChange={(e) => setSelectedPayment(e.target.value)}
+                    className="mt-1"
+                  />
+                  <div className="flex-1">
+                    <div className="mb-1 flex items-center gap-2">
+                      <Building2 className="h-5 w-5 text-green-600" />
+                      <span className="font-semibold text-gray-900">
+                        Bank Transfer
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Direct bank transfer payment
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              {/* Bank Transfer Details */}
+              {selectedPayment === "bank" && (
+                <div className="rounded-lg border border-red-200 bg-red-50 p-6">
+                  <div className="mb-4 flex items-start gap-2">
+                    <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
+                    <h3 className="font-semibold text-red-900">
+                      Bank Transfer Details
+                    </h3>
+                  </div>
+
+                  <div className="mb-4 space-y-3">
+                    <div>
+                      <p className="mb-1 text-sm font-medium text-red-900">
+                        Bank:
+                      </p>
+                      <div className="flex items-center justify-between rounded border border-red-200 bg-white p-2">
+                        <span className="font-medium text-red-600">
+                          {bankDetails.bankName}
+                        </span>
+                        <button
+                          onClick={() =>
+                            handleCopy(bankDetails.bankName, "bankName")
+                          }
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          {copiedField === "bankName" ? (
+                            <Check className="h-4 w-4" />
+                          ) : (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="mb-1 text-sm font-medium text-red-900">
+                        IBAN:
+                      </p>
+                      <div className="flex items-center justify-between rounded border border-red-200 bg-white p-2">
+                        <span className="font-mono font-medium text-red-600">
+                          {bankDetails.iban}
+                        </span>
+                        <button
+                          onClick={() => handleCopy(bankDetails.iban, "iban")}
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          {copiedField === "iban" ? (
+                            <Check className="h-4 w-4" />
+                          ) : (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="mb-1 text-sm font-medium text-red-900">
+                        BIC:
+                      </p>
+                      <div className="flex items-center justify-between rounded border border-red-200 bg-white p-2">
+                        <span className="font-mono font-medium text-red-600">
+                          {bankDetails.bic}
+                        </span>
+                        <button
+                          onClick={() => handleCopy(bankDetails.bic, "bic")}
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          {copiedField === "bic" ? (
+                            <Check className="h-4 w-4" />
+                          ) : (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-red-800">
+                    Complete bank details will be provided after order
+                    confirmation.
+                  </p>
+                </div>
+              )}
+
+              {/* Action Button */}
+              <div className="mt-6">
+                {selectedPayment === "stripe" ? (
+                  <button
+                    onClick={handleStripePayment}
+                    disabled={processingPayment}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                  >
+                    {processingPayment ? (
+                      <>
+                        <Clock className="h-5 w-5 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="h-5 w-5" />
+                        Proceed to Stripe Payment
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <div className="py-3 text-center text-gray-600">
+                    Please transfer the amount using the bank details above and
+                    contact support with your payment receipt.
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="space-y-6 lg:col-span-2">
