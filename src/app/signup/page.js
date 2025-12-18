@@ -1,3 +1,4 @@
+// Signup.jsx - With email ownership confirmation
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -5,19 +6,27 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { LoaderCircle } from "lucide-react";
-import useAuth from "@/hooks/useAuth";
-import { postApi } from "@/api/api";
 import { authFormValidationRules } from "@/data/authFormValidationRules";
 import FormField from "@/components/FormField";
 import Link from "next/link";
 import Image from "next/image";
+import { postApi } from "@/api/api";
+
+// Debounce utility
+function debounce(func, wait) {
+  let timeout;
+  const debounced = function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+  debounced.cancel = () => clearTimeout(timeout);
+  return debounced;
+}
 
 export default function Signup() {
-  const { addAuthInfo } = useAuth();
   const router = useRouter();
-  const [showPass, setShowPass] = useState(false);
   const [countries, setCountries] = useState([]);
-  const [emailAvailable, setEmailAvailable] = useState(null);
+  const [emailLoading, setEmailLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -27,10 +36,26 @@ export default function Signup() {
     getValues,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      bobosohomail: "@bobosohomail.com",
+      password: "",
+      contactEmail: "",
+      country: "",
+      address: "",
+      terms: false,
+      emailAvailableStatus: null, // null = not checked, true = available, false = taken
+      confirmEmailOwnership: false, // New field for ownership confirmation
+    },
+  });
 
-  // Watch the bobosohomail field to track changes
   const watchedFields = watch();
+
+  // Watch the emailAvailableStatus field directly
+  const emailAvailable = watch("emailAvailableStatus");
+  const confirmOwnership = watch("confirmEmailOwnership");
 
   useEffect(() => {
     fetch("/country.json")
@@ -38,75 +63,131 @@ export default function Signup() {
       .then((data) => setCountries(data));
   }, []);
 
-  // Handle email availability change from FormField
-  const handleEmailAvailabilityChange = (isAvailable) => {
-    setEmailAvailable(isAvailable);
+  // Email availability check function
+  const checkEmailAvailability = async (username) => {
+    if (username.length < 3) {
+      setValue("emailAvailableStatus", null, { shouldValidate: false });
+      setValue("confirmEmailOwnership", false, { shouldValidate: false });
+      return;
+    }
+
+    setEmailLoading(true);
+    try {
+      const response = await fetch(
+        "https://bobosohomail.com:8443/api/v2/cli/mail/call",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": "8322d0fd-75a8-417e-9eb0-155ec4df16b5",
+          },
+          body: JSON.stringify({
+            params: ["--info", `${username}@bobosohomail.com`],
+          }),
+        },
+      );
+
+      const data = await response.json();
+      const isAvailable = data.code === 1;
+
+      // Store availability status in form state
+      setValue("emailAvailableStatus", isAvailable, {
+        shouldValidate: false,
+      });
+
+      // Reset ownership confirmation when email changes
+      setValue("confirmEmailOwnership", false, { shouldValidate: false });
+    } catch (error) {
+      console.error("Error checking email availability", error);
+      setValue("emailAvailableStatus", false, { shouldValidate: false });
+      setValue("confirmEmailOwnership", false, { shouldValidate: false });
+    } finally {
+      setEmailLoading(false);
+    }
   };
 
-  // Check if form is valid and can be submitted
+  // Debounced version
+  const debouncedCheckEmail = debounce(checkEmailAvailability, 500);
+
+  // Callback for email input change
+  const handleEmailChange = (username) => {
+    if (username.length === 0) {
+      setValue("emailAvailableStatus", null, { shouldValidate: false });
+      setValue("confirmEmailOwnership", false, { shouldValidate: false });
+      debouncedCheckEmail.cancel();
+    } else {
+      debouncedCheckEmail(username);
+    }
+  };
+
+  // Form validation - now includes ownership confirmation when email is taken
   const isFormValid = () => {
-    // Check if all required fields have values
-    const hasRequiredFields =
+    const baseValidation =
       watchedFields.name &&
       watchedFields.bobosohomail &&
       watchedFields.password &&
       watchedFields.contactEmail &&
       watchedFields.country &&
       watchedFields.address &&
-      watchedFields.terms;
+      watchedFields.terms &&
+      Object.keys(errors).length === 0;
 
-    // Check if there are no validation errors
-    const hasNoErrors = Object.keys(errors).length === 0;
+    // If email is available (true), allow submission
+    if (emailAvailable === true) {
+      return baseValidation;
+    }
 
-    // Check if bobosoho email is available
-    const isEmailValid = emailAvailable === true;
+    // If email is taken (false), require ownership confirmation
+    if (emailAvailable === false) {
+      return baseValidation && confirmOwnership === true;
+    }
 
-    return hasRequiredFields && hasNoErrors && isEmailValid;
+    // If email hasn't been checked yet (null), don't allow submission
+    return false;
   };
 
   const onSubmit = async (data) => {
-    // Only submit if form is valid and email is available
-    if (isFormValid()) {
-      setIsLoading(true);
+    if (!isFormValid()) return;
 
-      try {
-        const { address, bobosohomail, contactEmail, country, name, password } =
-          data;
+    setIsLoading(true);
 
-        const payload = {
-          address,
-          // email: `${bobosohomail}@bobosohomail.com`,
-          username: bobosohomail,
-          personal_email: contactEmail,
-          country,
-          name,
-          password,
-        };
+    try {
+      const {
+        address,
+        bobosohomail,
+        contactEmail,
+        country,
+        name,
+        password,
+        confirmEmailOwnership,
+      } = data;
 
-        const res = await postApi({
-          endpoint: "/auth/user/register",
-          payload,
-        });
+      const payload = {
+        address,
+        username: bobosohomail.replace("@bobosohomail.com", ""),
+        personal_email: contactEmail,
+        country,
+        name,
+        password,
+        existing_email: confirmEmailOwnership ? "yes" : "no",
+      };
 
-        if (res?.success) {
-          toast.success(res?.message);
-          addAuthInfo(res?.data);
-          router.push("/login");
-        } else {
-          // Handle API response with success: false
-          toast.error(res?.message || "Registration failed. Please try again.");
-        }
-      } catch (error) {
-        // Handle network errors or other exceptions
-        console.error("Registration error:", error);
-        toast.error(
-          error?.message ||
-            "An error occurred during registration. Please try again.",
-        );
-      } finally {
-        // Always set loading to false, whether success or error
-        setIsLoading(false);
+      const res = await postApi({
+        endpoint: "/auth/user/register",
+        payload,
+      });
+
+      if (res?.success) {
+        toast.success(res?.message);
+        router.push("/login");
+      } else {
+        toast.error(res?.message || "Registration failed. Please try again.");
       }
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error(error?.message || "An error occurred during registration.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -134,25 +215,48 @@ export default function Signup() {
               getValues={getValues}
             />
 
-            <FormField
-              label="Bobosohomail"
-              name="bobosohomail"
-              required
-              toolTip
-              register={register}
-              errors={errors}
-              setValue={setValue}
-              getValues={getValues}
-              isBobosohoEmail={true}
-              onEmailAvailabilityChange={handleEmailAvailabilityChange}
-            />
+            <div>
+              <FormField
+                label="Bobosohomail"
+                name="bobosohomail"
+                required
+                toolTip
+                register={register}
+                errors={errors}
+                setValue={setValue}
+                getValues={getValues}
+                isBobosohoEmail={true}
+                emailAvailable={emailAvailable}
+                emailLoading={emailLoading}
+                onEmailChange={handleEmailChange}
+              />
+
+              {/* Email ownership confirmation checkbox - only show if email is taken */}
+              {emailAvailable === false && (
+                <div className="mt-3 flex items-start gap-2 rounded border border-amber-200 bg-amber-50 p-3">
+                  <input
+                    type="checkbox"
+                    id="confirmEmailOwnership"
+                    className="mt-0.5"
+                    {...register("confirmEmailOwnership")}
+                  />
+                  <label
+                    htmlFor="confirmEmailOwnership"
+                    className="text-sm text-amber-900"
+                  >
+                    This email is already registered. Check this box to confirm
+                    this is your email address.
+                  </label>
+                </div>
+              )}
+            </div>
 
             <FormField
               label="Password"
-              type={showPass ? "text" : "password"}
+              type="password"
               name="password"
               required
-              togglePass={setShowPass}
+              togglePass={true}
               register={register}
               errors={errors}
               validation={authFormValidationRules.password}
@@ -185,9 +289,7 @@ export default function Signup() {
                   required: "Please select a country.",
                 })}
               >
-                <option value="" disabled>
-                  Select country
-                </option>
+                <option value="">Select country</option>
                 {countries.map((country, i) => (
                   <option key={i} value={country.name}>
                     {country.name}
