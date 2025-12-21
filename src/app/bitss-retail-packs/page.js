@@ -40,7 +40,7 @@ export default function BitssRetailPacks() {
         setError(null);
 
         const response = await fetch(
-          `https://paymentapi.bfinit.com/api/v1/products/product/show/690718729ddffc5f45c8c449`,
+          `https://backend.bitss.one/api/v1/products/product/show/690718729ddffc5f45c8c449`,
         );
         const result = await response.json();
 

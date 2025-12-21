@@ -44,7 +44,7 @@ export default function Products() {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://paymentapi.bfinit.com/api/v1/products/product/category-wise/products",
+        "https://backend.bitss.one/api/v1/products/product/category-wise/products",
       );
       const data = await response.json();
 

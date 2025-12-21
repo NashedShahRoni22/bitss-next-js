@@ -32,7 +32,7 @@ export default function ProductDetailsPage() {
         setError(null); // Reset error state
 
         const response = await fetch(
-          `https://paymentapi.bfinit.com/api/v1/products/product/show/${id}`,
+          `https://backend.bitss.one/api/v1/products/product/show/${id}`,
         );
 
         const result = await response.json();
