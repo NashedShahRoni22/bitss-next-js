@@ -1,6 +1,6 @@
-// FormField.jsx - Complete fixed version
 import { useState } from "react";
 import { Eye, EyeOff, Info } from "lucide-react";
+import { useWatch } from "react-hook-form";
 
 export default function FormField({
   label,
@@ -18,9 +18,24 @@ export default function FormField({
   onEmailChange,
   setValue,
   getValues,
+  control,
 }) {
-  const [emailPrefix, setEmailPrefix] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  // Only use useWatch for bobosoho email field
+  const watchedEmail =
+    isBobosohoEmail && control
+      ? useWatch({
+          control,
+          name: name,
+          defaultValue: "@bobosohomail.com",
+        })
+      : "@bobosohomail.com";
+
+  // Extract username from full email
+  const emailPrefix = isBobosohoEmail
+    ? (watchedEmail || "@bobosohomail.com").replace("@bobosohomail.com", "")
+    : "";
 
   const validateBobosohoEmailFormat = (value) => {
     const validPattern = /^[a-z0-9._-]+$/;
@@ -56,10 +71,9 @@ export default function FormField({
     if (!isBobosohoEmail) return;
 
     let inputValue = e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, "");
-    setEmailPrefix(inputValue);
 
     const fullEmail = `${inputValue}@bobosohomail.com`;
-    setValue(name, fullEmail);
+    setValue(name, fullEmail, { shouldValidate: true });
 
     // Notify parent about the username change
     if (onEmailChange) {
@@ -112,11 +126,7 @@ export default function FormField({
               id={name}
               placeholder="Pick a username (ex. walterwhite)"
               value={emailPrefix}
-              {...register(name, {
-                required: required ? `${label} is required` : false,
-                onChange: handleEmailChange,
-                ...getBobosohoValidationRules(),
-              })}
+              onChange={handleEmailChange}
             />
             <div
               className={`inline-flex items-center gap-2 rounded-r border bg-gray-50 px-4 py-2 ${getBorderClass()}`}
@@ -133,6 +143,14 @@ export default function FormField({
                 </div>
               )}
             </div>
+            {/* Hidden input for react-hook-form */}
+            <input
+              type="hidden"
+              {...register(name, {
+                required: required ? `${label} is required` : false,
+                ...getBobosohoValidationRules(),
+              })}
+            />
           </div>
         ) : (
           <input

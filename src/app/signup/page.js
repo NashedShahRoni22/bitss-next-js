@@ -35,6 +35,7 @@ export default function Signup() {
     setValue,
     getValues,
     watch,
+    control,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -88,14 +89,13 @@ export default function Signup() {
       );
 
       const data = await response.json();
+
       const isAvailable = data.code === 1;
 
-      // Store availability status in form state
       setValue("emailAvailableStatus", isAvailable, {
         shouldValidate: false,
       });
 
-      // Reset ownership confirmation when email changes
       setValue("confirmEmailOwnership", false, { shouldValidate: false });
     } catch (error) {
       console.error("Error checking email availability", error);
@@ -213,6 +213,7 @@ export default function Signup() {
               errors={errors}
               setValue={setValue}
               getValues={getValues}
+              control={control}
             />
 
             <div>
@@ -225,6 +226,7 @@ export default function Signup() {
                 errors={errors}
                 setValue={setValue}
                 getValues={getValues}
+                control={control}
                 isBobosohoEmail={true}
                 emailAvailable={emailAvailable}
                 emailLoading={emailLoading}
@@ -262,6 +264,7 @@ export default function Signup() {
               validation={authFormValidationRules.password}
               setValue={setValue}
               getValues={getValues}
+              control={control}
             />
 
             <FormField
@@ -274,6 +277,7 @@ export default function Signup() {
               validation={authFormValidationRules.contactEmail}
               setValue={setValue}
               getValues={getValues}
+              control={control}
             />
 
             {/* countries select dropdown */}
