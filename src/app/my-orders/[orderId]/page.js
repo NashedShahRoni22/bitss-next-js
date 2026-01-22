@@ -4,6 +4,14 @@ import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import SectionContainer from "@/components/shared/SectionContainer";
 import PrivateRoute from "@/components/shared/PrivateRoute";
+import {
+  CheckCircle,
+  Clock,
+  RefreshCw,
+  XCircle,
+  RotateCcw,
+  CircleAlert,
+} from "lucide-react";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
@@ -47,16 +55,51 @@ export default function OrderDetails() {
     return `${amount} ${currency}`;
   };
 
-  const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "active":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "expired":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+  const getStatusInfo = (status) => {
+    const normalizedStatus = status?.toLowerCase();
+
+    if (normalizedStatus === "active") {
+      return {
+        label: "Active",
+        color: "bg-green-50 text-green-700 border-green-200",
+        icon: CheckCircle,
+        iconColor: "text-green-600",
+      };
+    } else if (normalizedStatus === "pending") {
+      return {
+        label: "Pending Payment",
+        color: "bg-orange-50 text-orange-700 border-orange-200",
+        icon: Clock,
+        iconColor: "text-orange-600",
+      };
+    } else if (normalizedStatus === "processing") {
+      return {
+        label: "Processing",
+        color: "bg-blue-50 text-blue-700 border-blue-200",
+        icon: RefreshCw,
+        iconColor: "text-blue-600",
+      };
+    } else if (normalizedStatus === "cancelled") {
+      return {
+        label: "Cancelled",
+        color: "bg-red-50 text-red-700 border-red-200",
+        icon: XCircle,
+        iconColor: "text-red-600",
+      };
+    } else if (normalizedStatus === "refunded") {
+      return {
+        label: "Refunded",
+        color: "bg-purple-50 text-purple-700 border-purple-200",
+        icon: RotateCcw,
+        iconColor: "text-purple-600",
+      };
+    } else {
+      return {
+        label: "Inactive",
+        color: "bg-gray-50 text-gray-700 border-gray-200",
+        icon: CircleAlert,
+        iconColor: "text-gray-600",
+      };
     }
   };
 
@@ -121,6 +164,8 @@ export default function OrderDetails() {
   }
 
   const order = orderData.data;
+  const statusInfo = getStatusInfo(order.status);
+  const StatusIcon = statusInfo.icon;
 
   return (
     <PrivateRoute>
@@ -138,11 +183,10 @@ export default function OrderDetails() {
             </div>
             <div className="text-right">
               <span
-                className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${getStatusColor(
-                  order.status,
-                )}`}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium ${statusInfo.color}`}
               >
-                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                <StatusIcon className={`h-4 w-4 ${statusInfo.iconColor}`} />
+                {statusInfo.label}
               </span>
             </div>
           </div>

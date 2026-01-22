@@ -3,14 +3,18 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import {
   Calendar,
+  CheckCircle,
   CircleAlert,
   Clock,
   CreditCard,
   Eye,
   Filter,
   Package,
+  RefreshCw,
+  RotateCcw,
   Search,
   Shield,
+  XCircle,
 } from "lucide-react";
 import PrivateRoute from "@/components/shared/PrivateRoute";
 import SectionContainer from "@/components/shared/SectionContainer";
@@ -53,20 +57,41 @@ const MyOrders = () => {
     }
   }, [authInfo]);
 
-  const getStatusInfo = (status, isPaid) => {
-    if (status === "active" && isPaid) {
+  const getStatusInfo = (status) => {
+    if (status === "active") {
       return {
         label: "Active",
         color: "bg-green-50 text-green-700 border-green-200",
-        icon: CircleAlert,
+        icon: CheckCircle,
         iconColor: "text-green-600",
       };
-    } else if (status === "pending" || !isPaid) {
+    } else if (status === "pending") {
       return {
         label: "Pending Payment",
         color: "bg-orange-50 text-orange-700 border-orange-200",
         icon: Clock,
         iconColor: "text-orange-600",
+      };
+    } else if (status === "processing") {
+      return {
+        label: "Processing",
+        color: "bg-blue-50 text-blue-700 border-blue-200",
+        icon: RefreshCw,
+        iconColor: "text-blue-600",
+      };
+    } else if (status === "cancelled") {
+      return {
+        label: "Cancelled",
+        color: "bg-red-50 text-red-700 border-red-200",
+        icon: XCircle,
+        iconColor: "text-red-600",
+      };
+    } else if (status === "refunded") {
+      return {
+        label: "Refunded",
+        color: "bg-purple-50 text-purple-700 border-purple-200",
+        icon: RotateCcw,
+        iconColor: "text-purple-600",
       };
     } else {
       return {
@@ -259,7 +284,7 @@ const MyOrders = () => {
 
               {filteredOrders.map((order) => {
                 const invoice = order.invoices?.[0];
-                const statusInfo = getStatusInfo(order.status, invoice?.paid);
+                const statusInfo = getStatusInfo(order.status);
                 const StatusIcon = statusInfo.icon;
 
                 return (

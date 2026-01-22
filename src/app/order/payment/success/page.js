@@ -15,16 +15,17 @@ export default function PaymentSuccess() {
 
         {/* Success Message */}
         <h1 className="mb-3 text-3xl font-bold text-gray-900">
-          Order Renewed Successfully!
+          Order Confirmed!
         </h1>
         <p className="mb-8 text-gray-600">
-          Your renewal has been confirmed and is being processed.
+          Thank you for your purchase. A confirmation email has been sent to
+          your inbox.
         </p>
 
         {/* Info Card */}
-        <div className="mb-8 rounded-lg bg-white p-6 shadow-lg">
+        <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6">
           <div className="mb-4 flex items-start gap-3 text-left">
-            <Mail className="text-primary mt-0.5 h-5 w-5 flex-shrink-0" />
+            <Mail className="text-primary mt-0.5 h-5 w-5 shrink-0" />
             <div>
               <p className="font-medium text-gray-900">Confirmation Sent</p>
               <p className="text-sm text-gray-600">
@@ -33,7 +34,7 @@ export default function PaymentSuccess() {
             </div>
           </div>
           <div className="flex items-start gap-3 text-left">
-            <Package className="text-primary mt-0.5 h-5 w-5 flex-shrink-0" />
+            <Package className="text-primary mt-0.5 h-5 w-5 shrink-0" />
             <div>
               <p className="font-medium text-gray-900">Order Processing</p>
               <p className="text-sm text-gray-600">
