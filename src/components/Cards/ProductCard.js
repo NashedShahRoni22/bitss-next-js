@@ -11,9 +11,9 @@ export default function ProductCard({ product, categoryId }) {
   const pathname = usePathname();
 
   const handleAddToCart = () => {
-    if (product._id === "690718729ddffc5f45c8c449") {
-      return router.push(`/bitss-retail-packs`);
-    }
+    // if (product._id === "690718729ddffc5f45c8c449") {
+    //   return router.push(`/bitss-retail-packs`);
+    // }
 
     // Check if user is authenticated
     if (!authInfo?.access_token && product._id !== "690718729ddffc5f45c8c449") {
@@ -119,9 +119,10 @@ export default function ProductCard({ product, categoryId }) {
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-red-700 hover:shadow-md active:scale-[0.98]"
         >
           <ShoppingCart className="h-4 w-4" />
-          {product._id === "690718729ddffc5f45c8c449"
+          {/* {product._id === "690718729ddffc5f45c8c449"
             ? "Order Now"
-            : "Add to Cart"}
+            : "Add to Cart"} */}
+            Add to Cart
         </button>
         <Link
           href={

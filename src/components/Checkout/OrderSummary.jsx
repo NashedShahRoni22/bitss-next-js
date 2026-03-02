@@ -89,7 +89,7 @@ export default function OrderSummary({
             type="button"
             onClick={handleSubmit}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-3 font-semibold text-white transition-all duration-200 ease-in-out hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={!agreeTerms || !domain || loading}
+            disabled={!agreeTerms || !domain || loading || cartItems.length === 0}
           >
             Complete Purchase
             {loading && <LoaderCircle className="animate-spin" />}

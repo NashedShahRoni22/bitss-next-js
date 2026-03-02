@@ -14,6 +14,10 @@ export const staticNavLinks = [
         name: "BITSS Retail Packs",
         link: "/bitss-retail-packs",
       },
+      {
+        name: "BITSS USB Products",
+        link: "/bitss-usb-products",
+      },
     ],
   },
   {

@@ -26,7 +26,7 @@ export default function Featured() {
                 alt={feat.name}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 512px"
-                className="rounded-lg object-cover"
+                className="rounded-lg object-contain"
               />
             </div>
           </div>

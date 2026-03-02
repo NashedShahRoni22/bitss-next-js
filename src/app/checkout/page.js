@@ -215,6 +215,7 @@ const Checkout = () => {
               agreeTerms,
               setAgreeTerms,
               currencies,
+              cartItems,
             }}
           />
           {/* Right Column - Order Summary */}

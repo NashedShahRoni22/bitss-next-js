@@ -13,10 +13,12 @@ import { postApi } from "@/api/api";
 import useAuth from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import useCart from "@/hooks/useCart";
 
 export default function BitssRetailPacks() {
   const router = useRouter();
   const { authInfo } = useAuth();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -122,9 +124,11 @@ export default function BitssRetailPacks() {
         phone: formData.phone,
         country: formData.country,
         address: formData.address,
-        package_name: product.name,
         duration: selectedPeriod.duration,
-        package_price: calculatePrice(),
+        discount_type: selectedPeriod.discount_type,
+        amount: calculatePrice(),
+        order_status: "pending",
+        product: product._id,
       };
 
       const response = await postApi({
@@ -190,6 +194,31 @@ export default function BitssRetailPacks() {
     );
   }
 
+  const handleAddToCart = () => {
+    // if (product._id === "690718729ddffc5f45c8c449") {
+    //   return router.push(`/bitss-retail-packs`);
+    // }
+
+    // Check if user is authenticated
+    if (!authInfo?.access_token && product._id !== "690718729ddffc5f45c8c449") {
+      return router.push(`/login?redirect=${pathname}`);
+    }
+
+    // Prepare cart item with product data
+    const cartProduct = {
+      id: product._id,
+      categoryId: "69071a3d9ddffc5f45c8c55e",
+      name: product.name,
+      price: product.price,
+      status: product.status,
+      productDetails: product.product_details,
+      subscriptions: product.subscription_periods,
+    };
+
+    // Add to cart
+    addToCart(cartProduct);
+  };
+
   // Main Content
   return (
     <SectionContainer>
@@ -202,9 +231,9 @@ export default function BitssRetailPacks() {
           <h1 className="mb-2 text-4xl font-bold text-gray-900">
             Order {product?.name}
           </h1>
-          <p className="text-lg text-gray-600">
+          {/* <p className="text-lg text-gray-600">
             Fill in your details and we&apos;ll deliver to your doorstep
-          </p>
+          </p> */}
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
@@ -312,14 +341,14 @@ export default function BitssRetailPacks() {
           </div>
 
           {/* Order Form Card */}
-          <div className="rounded bg-white p-6 shadow lg:p-8">
+          <div className="rounded bg-white p-6 shadow lg:p-8 h-fit">
             <h3 className="mb-6 text-2xl font-bold text-gray-900">
-              Delivery Information
+              Place Order Now
             </h3>
 
             <div className="space-y-5">
               {/* Name */}
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Full Name <span className="text-red-500">*</span>
                 </label>
@@ -336,10 +365,10 @@ export default function BitssRetailPacks() {
                 {formErrors.name && (
                   <p className="mt-1 text-sm text-red-500">{formErrors.name}</p>
                 )}
-              </div>
+              </div> */}
 
               {/* Email */}
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Email Address <span className="text-red-500">*</span>
                 </label>
@@ -358,10 +387,10 @@ export default function BitssRetailPacks() {
                     {formErrors.email}
                   </p>
                 )}
-              </div>
+              </div> */}
 
               {/* Phone */}
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Phone Number <span className="text-red-500">*</span>
                 </label>
@@ -380,10 +409,10 @@ export default function BitssRetailPacks() {
                     {formErrors.phone}
                   </p>
                 )}
-              </div>
+              </div> */}
 
               {/* Country */}
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Country <span className="text-red-500">*</span>
                 </label>
@@ -402,10 +431,10 @@ export default function BitssRetailPacks() {
                     {formErrors.country}
                   </p>
                 )}
-              </div>
+              </div> */}
 
               {/* Address */}
-              <div>
+              {/* <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Full Address <span className="text-red-500">*</span>
                 </label>
@@ -424,7 +453,7 @@ export default function BitssRetailPacks() {
                     {formErrors.address}
                   </p>
                 )}
-              </div>
+              </div> */}
 
               {/* Order Summary */}
               <div className="rounded-lg border border-red-200 bg-linear-to-r from-red-50 to-indigo-50 p-4">
@@ -458,8 +487,8 @@ export default function BitssRetailPacks() {
               {/* Submit Button */}
               <button
                 type="button"
-                onClick={handleSubmit}
-                disabled={submitting}
+                onClick={handleAddToCart}
+                // disabled={submitting}
                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-linear-to-r from-red-600 to-indigo-600 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:from-red-700 hover:to-indigo-700 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {submitting ? (
@@ -470,7 +499,7 @@ export default function BitssRetailPacks() {
                 ) : (
                   <>
                     <Box />
-                    Place Order
+                    Add to Cart
                   </>
                 )}
               </button>

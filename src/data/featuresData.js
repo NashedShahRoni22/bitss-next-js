@@ -4,7 +4,7 @@ const vwarIcon = "/images/logo/bitss-vwar.png";
 const webProtect = "/images/home/website-protection.png";
 const antispamContact = "/images/home/antispam-cotanct.png";
 const preselectForm = "/images/home/pre-select-form.png";
-const bitssRetailPack = "/images/home/bitss retail pack.png";
+const bitssRetailPack = "/images/home/bitss-vwar.png";
 
 export const featuresData = [
   {
@@ -61,7 +61,7 @@ export const featuresData = [
     icon: vwarIcon,
     name: "Bitss Retail Pack",
     title:
-      "BITSS VWAR - Windows Device Protection ( Desinged for Microsoft Windows )",
+      "BITSS VWAR - Windows Device Protection ( Designed for Windows Laptop and Desktop Devices )",
     overview:
       "Realtime protection against Malware (inck. Done Attacks) Ransomewear and Viruses - Trojans to spywear.",
     features: [

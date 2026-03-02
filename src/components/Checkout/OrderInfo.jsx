@@ -19,9 +19,16 @@ export default function OrderInfo({
   agreeTerms,
   setAgreeTerms,
   currencies,
+  cartItems,
 }) {
   const [domainError, setDomainError] = useState("");
   const [domainValid, setDomainValid] = useState(false);
+  // bitss vwar id
+  const targetId = "68c697cec4b31386c2c2b8ed";
+  // Check if cart has exactly one item and the ID matches
+  const DomainNameNeeded = !(
+    cartItems.length === 1 && cartItems[0].id === targetId
+  );
 
   // Domain validation function
   const validateDomain = (value) => {
@@ -143,61 +150,63 @@ export default function OrderInfo({
   return (
     <div className="space-y-6 lg:col-span-2">
       {/* Domain Information */}
-      <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">
-          Domain Information
-        </h2>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
-            Domain Name <span className="text-red-500">*</span>
-          </label>
-          <div className="relative">
-            <input
-              type="text"
-              required
-              placeholder="example.com"
-              className={`w-full rounded-md border px-3 py-2 pr-10 transition-colors focus:border-transparent focus:outline-none focus:ring-2 ${getDomainInputClass()}`}
-              value={domain}
-              onChange={handleDomainChange}
-              onBlur={handleDomainBlur}
-            />
-            {/* Validation icon */}
-            {domain && (
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                {domainValid ? (
-                  <Check className="h-5 w-5 text-green-500" />
-                ) : domainError ? (
-                  <CircleAlert className="h-5 w-5 text-red-500" />
-                ) : null}
-              </div>
+      {DomainNameNeeded && (
+        <div className="rounded-lg bg-white p-6 shadow-sm">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900">
+            Domain Information
+          </h2>
+          <div>
+            <label className="mb-2 block text-sm font-medium text-gray-700">
+              Domain Name <span className="text-red-500">*</span>
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                required
+                placeholder="example.com"
+                className={`w-full rounded-md border px-3 py-2 pr-10 transition-colors focus:border-transparent focus:ring-2 focus:outline-none ${getDomainInputClass()}`}
+                value={domain}
+                onChange={handleDomainChange}
+                onBlur={handleDomainBlur}
+              />
+              {/* Validation icon */}
+              {domain && (
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  {domainValid ? (
+                    <Check className="h-5 w-5 text-green-500" />
+                  ) : domainError ? (
+                    <CircleAlert className="h-5 w-5 text-red-500" />
+                  ) : null}
+                </div>
+              )}
+            </div>
+
+            {/* Error message */}
+            {domainError && (
+              <p className="mt-1 flex items-center gap-1 text-sm text-red-600">
+                <CircleAlert className="h-4 w-4" />
+                {domainError}
+              </p>
+            )}
+
+            {/* Success message */}
+            {domainValid && !domainError && (
+              <p className="mt-1 flex items-center gap-1 text-sm text-green-600">
+                <Check className="h-4 w-4" />
+                Valid domain name
+              </p>
+            )}
+
+            {/* Help text */}
+            {!domain && (
+              <p className="mt-1 text-sm text-gray-500">
+                Enter the domain where you&apos;ll use these products (e.g.,
+                example.com)
+              </p>
             )}
           </div>
-
-          {/* Error message */}
-          {domainError && (
-            <p className="mt-1 flex items-center gap-1 text-sm text-red-600">
-              <CircleAlert className="h-4 w-4" />
-              {domainError}
-            </p>
-          )}
-
-          {/* Success message */}
-          {domainValid && !domainError && (
-            <p className="mt-1 flex items-center gap-1 text-sm text-green-600">
-              <Check className="h-4 w-4" />
-              Valid domain name
-            </p>
-          )}
-
-          {/* Help text */}
-          {!domain && (
-            <p className="mt-1 text-sm text-gray-500">
-              Enter the domain where you&apos;ll use these products (e.g.,
-              example.com)
-            </p>
-          )}
         </div>
-      </div>
+      )}
 
       {/* Payment Options */}
       <div className="rounded-lg bg-white p-6 shadow-sm">
@@ -212,7 +221,7 @@ export default function OrderInfo({
           </label>
           <div className="relative">
             <select
-              className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-red-500 focus:outline-none"
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
             >
@@ -232,7 +241,7 @@ export default function OrderInfo({
                 </>
               )}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+            <ChevronDown className="pointer-events-none absolute top-2.5 right-3 h-5 w-5 text-gray-400" />
           </div>
         </div>
 
@@ -315,14 +324,14 @@ export default function OrderInfo({
           </div>
 
           {paymentType === "bank" && (
-            <div className="mt-4 rounded-md border border-primary/10 bg-primary/5 p-4">
+            <div className="border-primary/10 bg-primary/5 mt-4 rounded-md border p-4">
               <div className="flex items-start">
-                <Info className="mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
+                <Info className="text-primary mt-0.5 mr-3 h-5 w-5 flex-shrink-0" />
                 <div>
-                  <h4 className="font-medium text-primary">
+                  <h4 className="text-primary font-medium">
                     Bank Transfer Details
                   </h4>
-                  <div className="mt-2 text-sm text-primary">
+                  <div className="text-primary mt-2 text-sm">
                     <p>
                       <strong>Bank:</strong> LCL Bank France
                     </p>

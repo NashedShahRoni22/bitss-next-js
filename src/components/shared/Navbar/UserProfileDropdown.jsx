@@ -70,7 +70,7 @@ export default function UserProfileDropdown() {
 
           {/* Welcome text and chevron */}
           <span className="hidden text-sm font-medium md:block">
-            Welcome, {authInfo?.user?.name?.split(" ")[0] || "User"}
+            Hi, {authInfo?.user?.name?.split(" ")[0] || "User"}
           </span>
           <ChevronDown
             className={`h-4 w-4 transition-transform duration-200 ${

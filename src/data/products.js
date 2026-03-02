@@ -8,20 +8,24 @@ export const products = [
     link: "https://pensaki.org/",
   },
   {
+    name: "Ifgaap Accounting Software",
+    link: "https://ifgaap.org/",
+  },
+  {
     name: "Omada HR Payroll",
     link: "https://omada-clasico.com/",
   },
   {
-    name: "Ifgaap Acounting & Invoicing",
-    link: "https://ifgaap.org/",
+    name: "E Bfinit",
+    link: "https://bfinit.com/",
   },
   {
-    name: "BFINIT Saas Software",
-    link: "https://officetools.bobosoho.com/special-software/",
+    name: "Scotty Pumpkin",
+    link: "https://scottypumpkin.com/",
   },
   {
-    name: "BFINIT White Label",
-    link: "https://bfin.company/software/white_label/",
+    name: "USFRANC",
+    link: "https://usfranc.com/",
   },
   {
     name: "Sosay Social Media",

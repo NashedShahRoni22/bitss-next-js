@@ -49,7 +49,7 @@ export default function Navbar() {
       {/* TODO: uncomment this component */}
       <div
         id="google_translate_element"
-        className="mx-auto hidden w-fit lg:block"
+        className="mx-auto w-fit pt-4"
       ></div>
 
       <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between px-5 md:px-0">
