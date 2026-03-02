@@ -8,11 +8,11 @@ export default function OrderSummary({
   currency,
   currencies,
   loading,
+  isDomainRequired, // ← used to conditionally gate the checkout button on domain
 }) {
   const { cartItems, calculateItemPrice, calculateTotal, removeFromCart } =
     useCart();
 
-  // Convert price from EUR to selected currency
   const convertPrice = (eurPrice) => {
     if (!currencies || currency === "EUR") return eurPrice;
     const rate = currencies[currency] || 1;
@@ -24,6 +24,17 @@ export default function OrderSummary({
     return `${convertedPrice.toFixed(2)} ${currency}`;
   };
 
+  // Button is disabled when:
+  // - Terms not agreed
+  // - Still loading
+  // - Cart is empty
+  // - Domain is required but not yet provided
+  const isCheckoutDisabled =
+    !agreeTerms ||
+    loading ||
+    cartItems.length === 0 ||
+    (isDomainRequired && !domain.trim());
+
   return (
     <div className="lg:col-span-1">
       <div className="sticky top-4 rounded-lg bg-white p-6 shadow-sm">
@@ -31,6 +42,7 @@ export default function OrderSummary({
           <ShoppingCart className="mr-2 h-5 w-5" />
           Order Summary
         </h2>
+
         {/* Products */}
         <div className="mb-6 space-y-4">
           {cartItems.map((item, index) => (
@@ -47,9 +59,6 @@ export default function OrderSummary({
                 </button>
               </div>
               <div className="mb-3 space-y-1 text-xs text-gray-600">
-                {/* <p>
-                  Version: <span className="font-medium">{item.version}</span>
-                </p> */}
                 <p>
                   Duration:{" "}
                   <span className="font-medium">
@@ -76,6 +85,7 @@ export default function OrderSummary({
             </div>
           ))}
         </div>
+
         {/* Total */}
         <div className="border-t pt-4">
           <div className="mb-6 flex items-center justify-between">
@@ -84,12 +94,13 @@ export default function OrderSummary({
               {formatPrice(calculateTotal())}
             </span>
           </div>
+
           {/* Checkout Button */}
           <button
             type="button"
             onClick={handleSubmit}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-3 font-semibold text-white transition-all duration-200 ease-in-out hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={!agreeTerms || !domain || loading || cartItems.length === 0}
+            disabled={isCheckoutDisabled}
           >
             Complete Purchase
             {loading && <LoaderCircle className="animate-spin" />}

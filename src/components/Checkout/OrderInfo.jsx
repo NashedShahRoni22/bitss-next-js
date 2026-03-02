@@ -19,90 +19,51 @@ export default function OrderInfo({
   agreeTerms,
   setAgreeTerms,
   currencies,
-  cartItems,
+  isDomainRequired, // ← now a direct prop; no need to re-derive from cartItems here
 }) {
   const [domainError, setDomainError] = useState("");
   const [domainValid, setDomainValid] = useState(false);
-  // bitss vwar id
-  const targetId = "68c697cec4b31386c2c2b8ed";
-  // Check if cart has exactly one item and the ID matches
-  const DomainNameNeeded = !(
-    cartItems.length === 1 && cartItems[0].id === targetId
-  );
 
-  // Domain validation function
   const validateDomain = (value) => {
-    if (!value.trim()) {
-      return "Domain name is required";
-    }
+    if (!value.trim()) return "Domain name is required";
 
-    // Remove protocol if present and clean the input
     let cleanDomain = value.trim().toLowerCase();
     cleanDomain = cleanDomain.replace(/^https?:\/\//, "");
     cleanDomain = cleanDomain.replace(/^www\./, "");
-    cleanDomain = cleanDomain.replace(/\/.*$/, ""); // Remove path
-    cleanDomain = cleanDomain.replace(/:.*$/, ""); // Remove port
+    cleanDomain = cleanDomain.replace(/\/.*$/, "");
+    cleanDomain = cleanDomain.replace(/:.*$/, "");
 
-    // Basic domain format validation
     const domainRegex =
       /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
 
-    if (!domainRegex.test(cleanDomain)) {
+    if (!domainRegex.test(cleanDomain))
       return "Please enter a valid domain name (e.g., example.com)";
-    }
-
-    // Check for minimum length
-    if (cleanDomain.length < 4) {
-      return "Domain name is too short";
-    }
-
-    // Check for maximum length
-    if (cleanDomain.length > 253) {
-      return "Domain name is too long";
-    }
-
-    // Must contain at least one dot for TLD
-    if (!cleanDomain.includes(".")) {
+    if (cleanDomain.length < 4) return "Domain name is too short";
+    if (cleanDomain.length > 253) return "Domain name is too long";
+    if (!cleanDomain.includes("."))
       return "Please include a top-level domain (e.g., .com, .org)";
-    }
 
-    // Check for valid TLD (at least 2 characters)
     const parts = cleanDomain.split(".");
     const tld = parts[parts.length - 1];
-    if (tld.length < 2) {
-      return "Top-level domain must be at least 2 characters";
-    }
-
-    // Check that it's not just a TLD
-    if (parts.length < 2 || parts[0].length === 0) {
+    if (tld.length < 2) return "Top-level domain must be at least 2 characters";
+    if (parts.length < 2 || parts[0].length === 0)
       return "Please enter a complete domain name";
-    }
-
-    // Check for consecutive dots or hyphens
-    if (cleanDomain.includes("..") || cleanDomain.includes("--")) {
+    if (cleanDomain.includes("..") || cleanDomain.includes("--"))
       return "Domain cannot contain consecutive dots or hyphens";
-    }
-
-    // Check that it doesn't start or end with a hyphen
-    if (cleanDomain.startsWith("-") || cleanDomain.endsWith("-")) {
+    if (cleanDomain.startsWith("-") || cleanDomain.endsWith("-"))
       return "Domain cannot start or end with a hyphen";
-    }
 
-    return null; // No error, domain is valid
+    return null;
   };
 
-  // Handle domain input change
   const handleDomainChange = (e) => {
     const value = e.target.value;
     setDomain(value);
-
-    // Validate domain
     const error = validateDomain(value);
     setDomainError(error || "");
     setDomainValid(!error && value.trim() !== "");
   };
 
-  // Clean and format domain on blur
   const handleDomainBlur = () => {
     if (domain.trim()) {
       let cleanDomain = domain.trim().toLowerCase();
@@ -113,7 +74,6 @@ export default function OrderInfo({
 
       if (cleanDomain !== domain) {
         setDomain(cleanDomain);
-        // Re-validate the cleaned domain
         const error = validateDomain(cleanDomain);
         setDomainError(error || "");
         setDomainValid(!error && cleanDomain !== "");
@@ -121,7 +81,6 @@ export default function OrderInfo({
     }
   };
 
-  // Validate on component mount if domain already has value
   useEffect(() => {
     if (domain) {
       const error = validateDomain(domain);
@@ -130,27 +89,17 @@ export default function OrderInfo({
     }
   }, []);
 
-  // Determine input border color based on validation state
   const getDomainInputClass = () => {
-    if (!domain) {
-      return "border-gray-300 focus:border-red-500 focus:ring-red-500";
-    }
-
-    if (domainError) {
-      return "border-red-500 focus:border-red-500 focus:ring-red-500";
-    }
-
-    if (domainValid) {
-      return "border-green-500 focus:border-green-500 focus:ring-green-500";
-    }
-
+    if (!domain) return "border-gray-300 focus:border-red-500 focus:ring-red-500";
+    if (domainError) return "border-red-500 focus:border-red-500 focus:ring-red-500";
+    if (domainValid) return "border-green-500 focus:border-green-500 focus:ring-green-500";
     return "border-gray-300 focus:border-red-500 focus:ring-red-500";
   };
 
   return (
     <div className="space-y-6 lg:col-span-2">
-      {/* Domain Information */}
-      {DomainNameNeeded && (
+      {/* Domain Information — only shown when a domain is required */}
+      {isDomainRequired && (
         <div className="rounded-lg bg-white p-6 shadow-sm">
           <h2 className="mb-4 text-xl font-semibold text-gray-900">
             Domain Information
@@ -169,7 +118,6 @@ export default function OrderInfo({
                 onChange={handleDomainChange}
                 onBlur={handleDomainBlur}
               />
-              {/* Validation icon */}
               {domain && (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                   {domainValid ? (
@@ -181,7 +129,6 @@ export default function OrderInfo({
               )}
             </div>
 
-            {/* Error message */}
             {domainError && (
               <p className="mt-1 flex items-center gap-1 text-sm text-red-600">
                 <CircleAlert className="h-4 w-4" />
@@ -189,7 +136,6 @@ export default function OrderInfo({
               </p>
             )}
 
-            {/* Success message */}
             {domainValid && !domainError && (
               <p className="mt-1 flex items-center gap-1 text-sm text-green-600">
                 <Check className="h-4 w-4" />
@@ -197,7 +143,6 @@ export default function OrderInfo({
               </p>
             )}
 
-            {/* Help text */}
             {!domain && (
               <p className="mt-1 text-sm text-gray-500">
                 Enter the domain where you&apos;ll use these products (e.g.,

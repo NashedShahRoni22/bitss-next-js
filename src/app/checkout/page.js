@@ -10,95 +10,46 @@ import { postApi } from "@/api/api";
 import OrderInfo from "@/components/Checkout/OrderInfo";
 import OrderSummary from "@/components/Checkout/OrderSummary";
 
-const validateDomain = (value) => {
-  if (!value.trim()) {
-    return false;
-  }
+// Product ID that does NOT require a domain name
+const BITSS_VWAR_ID = "68c697cec4b31386c2c2b8ed";
 
-  // Remove protocol if present and clean the input
+const validateDomain = (value) => {
+  if (!value.trim()) return false;
+
   let cleanDomain = value.trim().toLowerCase();
   cleanDomain = cleanDomain.replace(/^https?:\/\//, "");
   cleanDomain = cleanDomain.replace(/^www\./, "");
   cleanDomain = cleanDomain.replace(/\/.*$/, "");
   cleanDomain = cleanDomain.replace(/:.*$/, "");
 
-  // Basic domain format validation
   const domainRegex =
     /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
 
-  if (!domainRegex.test(cleanDomain)) {
-    return false;
-  }
-
-  if (cleanDomain.length < 4 || cleanDomain.length > 253) {
-    return false;
-  }
-
-  if (!cleanDomain.includes(".")) {
-    return false;
-  }
+  if (!domainRegex.test(cleanDomain)) return false;
+  if (cleanDomain.length < 4 || cleanDomain.length > 253) return false;
+  if (!cleanDomain.includes(".")) return false;
 
   const parts = cleanDomain.split(".");
-  const tld = parts[parts.length - 1];
-  if (tld.length < 2) {
-    return false;
-  }
-
-  if (parts.length < 2 || parts[0].length === 0) {
-    return false;
-  }
-
-  if (cleanDomain.includes("..") || cleanDomain.includes("--")) {
-    return false;
-  }
-
-  if (cleanDomain.startsWith("-") || cleanDomain.endsWith("-")) {
-    return false;
-  }
+  if (parts[parts.length - 1].length < 2) return false;
+  if (parts.length < 2 || parts[0].length === 0) return false;
+  if (cleanDomain.includes("..") || cleanDomain.includes("--")) return false;
+  if (cleanDomain.startsWith("-") || cleanDomain.endsWith("-")) return false;
 
   return true;
 };
 
 const convertCartItems = (cartItems) => {
-  const startDate = new Date(); // Current date as start date
-
-  return cartItems.map((item) => {
-    // Get the first subscription (selected duration)
-    const selectedSubscription = item.subscriptions[0];
-    const duration = parseInt(selectedSubscription.duration);
-
-    // Calculate end date based on duration
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + duration);
-
-    // Calculate final price after discount
-    let finalPrice = item.price * duration; // Base price for the duration
-
-    if (selectedSubscription.discount_type === "percent") {
-      // Apply percentage discount
-      const discountAmount = (finalPrice * selectedSubscription.amount) / 100;
-      finalPrice = finalPrice - discountAmount;
-    } else if (selectedSubscription.discount_type === "flat") {
-      // Apply flat discount
-      finalPrice = finalPrice - selectedSubscription.amount;
-    }
-
-    return {
-      product: item.id,
-      period: selectedSubscription.duration,
-    };
-  });
+  return cartItems.map((item) => ({
+    product: item.id,
+    period: item.subscriptions[0].duration,
+  }));
 };
 
 function generateOrderId() {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
-  const random4Digit = String(Math.floor(Math.random() * 10000)).padStart(
-    4,
-    "0",
-  );
-
+  const random4Digit = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
   return `${year}${month}-${random4Digit}`;
 }
 
@@ -114,38 +65,42 @@ const Checkout = () => {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [currencies, setCurrencies] = useState(null);
 
-  // fetch currency name and value data
+  // Domain is NOT required when the cart contains only the BITSS_VWAR product
+  const isDomainRequired = !(
+    cartItems.length === 1 && cartItems[0]?.id === BITSS_VWAR_ID
+  );
+
   useEffect(() => {
     const fetchCurrencies = async () => {
       const res = await fetch("https://api.exchangerate-api.com/v4/latest/EUR");
       const data = await res.json();
       setCurrencies(data?.rates);
     };
-
     fetchCurrencies();
   }, []);
 
-  // handle checkout form submit
   const handleSubmit = async () => {
     if (!agreeTerms) {
       return toast.error("Please agree to the terms and conditions");
     }
-    if (!domain) {
-      return toast.error("Please enter your domain name");
-    }
-    if (!validateDomain(domain)) {
-      return toast.error("Please enter a valid domain name");
+
+    // Only validate domain if it's required for the current cart
+    if (isDomainRequired) {
+      if (!domain) {
+        return toast.error("Please enter your domain name");
+      }
+      if (!validateDomain(domain)) {
+        return toast.error("Please enter a valid domain name");
+      }
     }
 
     setLoading(true);
 
     try {
       const token = authInfo?.access_token;
-
       const products = convertCartItems(cartItems);
       const order_number = generateOrderId();
 
-      // Clean the domain before sending to API
       let cleanDomain = domain.trim().toLowerCase();
       cleanDomain = cleanDomain.replace(/^https?:\/\//, "");
       cleanDomain = cleanDomain.replace(/^www\./, "");
@@ -162,12 +117,12 @@ const Checkout = () => {
         payment_type: paymentType === "stripe" ? "online" : "bank",
         terms_and_conditions: agreeTerms,
         status: "due",
-        domain: cleanDomain, // Use cleaned domain
+        // Only include domain in payload if it's required and provided
+        ...(isDomainRequired && cleanDomain ? { domain: cleanDomain } : {}),
         products,
         ...(paymentType === "stripe" && { payment_method: "stripe" }),
       };
 
-      // Call the API
       const response = await postApi({
         endpoint: "/orders/order/confirm",
         payload,
@@ -216,6 +171,7 @@ const Checkout = () => {
               setAgreeTerms,
               currencies,
               cartItems,
+              isDomainRequired, // ← passed down, no need to re-derive it inside OrderInfo
             }}
           />
           {/* Right Column - Order Summary */}
@@ -227,6 +183,7 @@ const Checkout = () => {
               currency,
               currencies,
               loading,
+              isDomainRequired, // ← passed down so the button can unblock correctly
             }}
           />
         </div>
